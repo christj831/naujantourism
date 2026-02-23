@@ -15,7 +15,7 @@ const attractions = [
         name: 'Naujan Lake National Park', 
         category: 'Nature', 
         image: '/images/lake.jpg', 
-        desc: 'The fifth largest lake in the Philippines, teeming with wildlife and serene views.',
+        desc: 'As the fifth largest lake in the Philippines, this expansive biodiversity hotspot is a sanctuary for migratory birds and endemic wildlife. Visitors can enjoy serene boat rides across its glass-like waters, framed by lush mountain ranges and breathtaking sunsets.',
         coordinates: [121.32143932976706, 13.164128472005663],
         gallery: ['/images/benilda.jpg', '/images/liwasang.jpg', '/images/simbahang-bato.jpg', '/images/lake.jpg']
     },
@@ -24,7 +24,7 @@ const attractions = [
         name: 'Simbahang Bato (Bancuro Ruins)', 
         category: 'Heritage', 
         image: '/images/simbahang-bato.jpg',
-        desc: 'Built circa 1680, these coral and adobe ruins feature a "church within a church." Once a fortress against raids, it now stands as a testament to Naujeño devotion.',
+        desc: 'A hauntingly beautiful relic of the Spanish era, these 17th-century coral and adobe ruins house a "church within a church." Originally built as a fortress against raids, it now serves as a unique open-air sanctuary where history and faith converge among moss-covered walls.',
         coordinates: [121.32184698287517, 13.281370180034118]
     },
     { 
@@ -32,7 +32,7 @@ const attractions = [
         name: 'Liwasang Bonifacio', 
         category: 'Leisure', 
         image: '/images/liwasang.jpg',
-        desc: 'The heart of the town, perfect for afternoon strolls and local events.',
+        desc: 'The vibrant heart of Naujan, this public plaza is a gathering spot for locals and visitors alike. With its manicured greenery and open spaces, it is the perfect place for rhythmic afternoon strolls, community festivals, and experiencing the town’s warm social atmosphere.',
         coordinates: [121.3030, 13.3242]
     },
     {
@@ -40,7 +40,7 @@ const attractions = [
         name: 'Dao Waterlily Minipark',
         category: 'Nature',
         image: '/images/waterlily/main.jpg',
-        desc: 'A peaceful park featuring blooming water lilies and boat rides. Local artisans here craft eco-friendly bags and wallets from dried water lily stalks.',
+        desc: 'A picturesque eco-park where vibrant water lilies blanket the water’s surface. Beyond the scenic boat rides, the park is a hub for community craftsmanship, where local artisans transform dried water lily stalks into intricate, sustainable bags and fashion accessories.',
         coordinates: [121.31942065376933, 13.2567513208881],
         gallery: ['/images/waterlily/1.jpg', '/images/waterlily/2.jpg', '/images/waterlily/3.jpg']
     },
@@ -49,17 +49,16 @@ const attractions = [
         name: 'Montelago Hot Spring & Forest Falls',
         category: 'Nature',
         image: '/images/hotspring/main.jpg',
-        desc: 'Also known as Pungao Hot Spring, this volcanic site offers therapeutic warm mineral waters and guided nature walks along the shores of Naujan Lake.',
+        desc: 'Nestled along the geothermal veins of the region, Montelago offers therapeutic warm mineral pools perfect for relaxation. The site also features refreshing forest falls and guided treks that showcase the rugged, volcanic beauty of the Naujan Lake shoreline.',
         coordinates: [121.37576057128022, 13.222410474261634],
         gallery: ['/images/hotspring/1.jpg']
     },
     {
-        //not yet finished
         id: 'agrigold-farm',
         name: 'AgriGold Farm Learning Center Inc.',
         category: 'Agri-Tourism',
         image: '/images/agrigold/main.jpg',
-        desc: 'A certified Learning Site for Agriculture (LSA) in Pinagsabangan I that promotes sustainable farming practices and community agricultural training.',
+        desc: 'An educational sanctuary for modern farmers and eco-enthusiasts. This certified learning site provides immersive workshops on sustainable organic agriculture, poultry management, and innovative farming techniques designed to empower the local community.',
         coordinates: [121.25798077115141, 13.2533426861691],
         gallery: ['/images/agrigold/1.jpg', '/images/agrigold/2.jpg', '/images/agrigold/3.jpg']
     },
@@ -68,7 +67,7 @@ const attractions = [
         name: 'Celeste Beach House',
         category: 'Resort',
         image: '/images/celeste.jpg',
-        desc: 'A quiet beachfront resort in Brgy. Estrella offering a laid-back vibe and direct ocean access, ideal for families seeking a calm seaside getaway.',
+        desc: 'Escape the crowds at this intimate beachfront retreat in Brgy. Estrella. Featuring a laid-back, "home-away-from-home" vibe, it offers direct access to the sea and calm waters, making it an ideal choice for family reunions and quiet coastal holidays.',
         coordinates: [121.31222816936804, 13.32851830943331]
     },
     {
@@ -76,8 +75,8 @@ const attractions = [
         name: 'Largo Castillo Farm House',
         category: 'Agri-Tourism',
         image: '/images/largo/main.jpg',
-        desc: 'An eco-conscious farm in Nag-Iba 1 that promotes recycling. It provides a peaceful nature escape perfect for birthdays and small celebrations.',
-        coordinates: [121.27758068131465, 13.333447596743362,],
+        desc: 'A rustic getaway that champions eco-consciousness through creative recycling and natural living. Located in the quiet fields of Nag-Iba 1, this farmhouse provides a sprawling green space for private events, birthday celebrations, and peaceful farm-to-table experiences.',
+        coordinates: [121.27758068131465, 13.333447596743362],
         gallery: ['/images/largo/1.jpg' , '/images/largo/2.jpg', '/images/largo/3.jpg']
     },
     {
@@ -85,16 +84,15 @@ const attractions = [
         name: 'Nabul Beach Resort',
         category: 'Resort',
         image: '/images/nabul.jpg',
-        desc: 'A modest day-tour destination in San Jose known for clear waters and native kubo cottages. Perfect for quick weekend breaks and seaside picnics.',
+        desc: 'Defined by its simple charm and native kubo cottages, Nabul is a favorite for day-trippers. With clear, shallow waters and a gentle sea breeze, it provides a classic Filipino seaside picnic experience for those looking to unwind without the frills.',
         coordinates: [121.3400, 13.3700]
     },
     {
-        //not yet finished
         id: 'villa-cornitz',
         name: 'Villa Cornitz Mini Resort',
         category: 'Resort',
-        image: '/images/cornitz/main.jpg',
-        desc: 'A local mini resort in Adrialuna offering swimming pools and open cottages for family reunions and simple leisure activities.',
+        image: '/images/villa-cornitz.jpg',
+        desc: 'A hidden gem in Adrialuna, this mini resort specializes in intimate gatherings. With its well-maintained swimming pools and open-air cabanas, it is a local favorite for family reunions, birthdays, and quick weekend dips.',
         coordinates: [121.2920, 13.3050]
     },
     {
@@ -102,7 +100,7 @@ const attractions = [
         name: 'La Hacienda',
         category: 'Resort',
         image: '/images/la-hacienda.jpg',
-        desc: 'A Balinese-inspired private resort in Brgy. Bancuro featuring elegant themed villas, lush gardens, and a large pool for a serene countryside escape.',
+        desc: 'Transport yourself to Indonesia at this Balinese-inspired private oasis. Featuring elegantly designed themed villas, tropical gardens, and a centerpiece pool, La Hacienda offers a luxurious and serene escape in the heart of the countryside.',
         coordinates: [121.3180, 13.2800]
     },
     {
@@ -110,7 +108,7 @@ const attractions = [
         name: 'Villa Catalina Eco Farm Resort',
         category: 'Resort',
         image: '/images/villa-catalina.jpg',
-        desc: 'A nature-oriented eco-farm along Buhangin Road. It offers a relaxed, family-friendly environment for those who want to connect with the outdoors.',
+        desc: 'Blending agricultural charm with resort leisure, Villa Catalina offers a wholesome environment for nature lovers. Explore the lush surroundings of Buhangin Road or simply relax in a family-friendly space designed to reconnect guests with the outdoors.',
         coordinates: [121.3100, 13.3400]
     },
     {
@@ -118,7 +116,7 @@ const attractions = [
         name: 'Benilda ng Bancuro Resort & Restaurant',
         category: 'Resort',
         image: '/images/benilda.jpg',
-        desc: 'A massive resort featuring a slide-equipped pool, a butterfly sanctuary, and horseback riding. Notable for its "Three Wise Monkeys" statues.',
+        desc: 'A sprawling leisure destination famous for its vibrant atmosphere and diverse activities. From its slide-equipped swimming pools and butterfly sanctuary to horseback riding and the iconic "Three Wise Monkeys" statues, it offers endless fun for all ages.',
         coordinates: [121.3225, 13.2795]
     },
     {
@@ -126,41 +124,39 @@ const attractions = [
         name: '333 Steps (Melgar A)',
         category: 'Nature',
         image: '/images/333-steps.jpg',
-        desc: 'A journey of faith and perseverance in Melgara. The climb rewards visitors with a spellbinding vista of rolling landscapes and the glittering sea.',
+        desc: 'A rewarding pilgrimage of faith and fitness. The climb up 333 concrete steps takes you through lush vegetation, culminating in a hilltop view that offers a spellbinding panorama of the rolling Melgar landscape and the shimmering coastline.',
         coordinates: [121.3605, 13.2450]
     },
-    {
-        //not yet finished
-        id: 'naujan-agri-center',
-        name: 'Naujan Agricultural Center',
-        category: 'Agri-Tourism',
-        image: '/images/naujan-agri.jpg',
-        desc: 'A local government facility that serves as a hub for farmers, providing essential services, training, and programs to support food production.',
-        coordinates: [121.3005, 13.3230]
-    },
+    // {
+    //     // id: 'naujan-agri-center',
+    //     // name: 'Naujan Agricultural Center',
+    //     // category: 'Agri-Tourism',
+    //     // image: '/images/naujan-agri.jpg',
+    //     // desc: 'The backbone of the town’s agricultural innovation, this government-led facility is a vital hub for research and development. It provides farmers with access to essential services, modern training programs, and sustainable food production strategies.',
+    //     // coordinates: [121.3005, 13.3230]
+    // },
     {
         id: 'hafa-adai',
         name: 'Hafa Adai',
         category: 'Leisure',
         image: '/images/hafa-adai.jpg',
-        desc: 'A relaxing seaside spot in Brgy. Estrella where visitors can enjoy fresh ocean air, scenic views, and coastal dining.',
+        desc: 'Borrowing its name from the friendly Chamorro greeting, this coastal spot in Estrella offers a refreshing seaside dining experience. It is the perfect place to enjoy the sea breeze while sampling local delicacies with an unobstructed view of the horizon.',
         coordinates: [121.31022214428944, 13.331900799869143]
     },
-    {
-        //not yet finished
-        id: 'emerald-resort',
-        name: 'Emerald Resort',
-        category: 'Resort',
-        image: '/images/emerald.jpg',
-        desc: 'A peaceful beachfront getaway in Estrella offering comfortable accommodations and spacious areas for family bonding and group outings.',
-        coordinates: [121.3385, 13.3560]
-    },
+    // {
+    //     id: 'emerald-resort',
+    //     name: 'Emerald Resort',
+    //     category: 'Resort',
+    //     image: '/images/emerald.jpg',
+    //     desc: 'Situated along the pristine shoreline of Brgy. Estrella, Emerald Resort offers spacious accommodations and tranquil beachfront access. It is highly recommended for large group outings and family staycations seeking a peaceful oceanfront boundary.',
+    //     coordinates: [121.3385, 13.3560]
+    // },
     {
         id: 'mulawin-boulevard',
         name: 'Mulawin Boulevard',
         category: 'Landmark',
         image: '/images/mulawin.jpg',
-        desc: 'A key access route and neighborhood thoroughfare in Brgy. Mulawin, reflecting the ongoing infrastructure development of the town.',
+        desc: 'More than just a thoroughfare, Mulawin Boulevard represents the modern growth of Naujan. This scenic route serves as a key link between neighborhoods, offering a glimpse into the town’s developing infrastructure and local daily life.',
         coordinates: [121.2900, 13.3000]
     },
     {
@@ -168,7 +164,7 @@ const attractions = [
         name: 'Mai’s Place Private Pool',
         category: 'Resort',
         image: '/images/mais-place.jpg',
-        desc: 'A cozy leisure venue offering a private pool and on-site dining. Ideal for intimate gatherings and weekend staycations.',
+        desc: 'An exclusive retreat perfect for those who value privacy. Mai’s Place features a clean, modern private pool and an intimate dining area, making it a top choice for "staycations," small birthday parties, and quiet evening dips.',
         coordinates: [121.3010, 13.3280]
     },
     {
@@ -176,7 +172,7 @@ const attractions = [
         name: 'Rio del Sierra',
         category: 'Nature',
         image: '/images/rio-del-sierra.jpg',
-        desc: 'A serene river destination in Sitio Sili featuring refreshing cold waters, native kubo huts, and peaceful mountain views.',
+        desc: 'A hidden riverside sanctuary in Sitio Sili where the water is always cold and refreshing. Surrounded by majestic mountain views, guests can lounge in native kubo huts and enjoy the rhythmic sounds of the flowing river in a truly raw, natural setting.',
         coordinates: [121.3700, 13.2600]
     },
     {
@@ -184,7 +180,7 @@ const attractions = [
         name: 'DJMV Organic Healing Park',
         category: 'Agri-Tourism',
         image: '/images/djmv.jpg',
-        desc: 'An organic farm in Pinagsabangan I dedicated to sustainable agriculture and eco-friendly practices in a relaxing natural environment.',
+        desc: 'A unique destination focused on wellness and sustainability. This organic park promotes a "healing" lifestyle through chemical-free farming, eco-friendly practices, and a tranquil environment designed to soothe the mind and body.',
         coordinates: [121.2950, 13.3150]
     },
     {
@@ -192,7 +188,7 @@ const attractions = [
         name: 'Villa Valerie Resort',
         category: 'Resort',
         image: '/images/villa-valerie.jpg',
-        desc: 'A popular local venue for birthdays and outings, featuring swimming pools and open cottages for quality time with family and friends.',
+        desc: 'A cornerstone of local leisure, Villa Valerie is known for its spacious swimming pools and hospitable atmosphere. It remains one of the most popular venues for community celebrations, school outings, and family weekend activities.',
         coordinates: [121.3070, 13.3320]
     },
     {
@@ -200,24 +196,24 @@ const attractions = [
         name: 'Karacha Falls',
         category: 'Nature',
         image: '/images/karacha.jpg',
-        desc: 'A majestic, towering waterfall in Malvar reached via off-road tracks. Features a swimmable stream and refreshing cascades.',
+        desc: 'For the adventurous soul, Karacha Falls offers a majestic reward after an off-road journey through Malvar. This towering waterfall features powerful cascades and a deep, refreshing pool perfect for a cool swim in the heart of the forest.',
         coordinates: [121.3800, 13.2100]
     },
     {
-        //not yet finished
         id: 'oric-sa-bathala',
         name: 'ORIC sa Bathala Waterfalls',
         category: 'Nature',
-        image: '/images/oric.jpg',
-        desc: 'An emerging summer destination in Sitio Bathala. The trip features a famous hanging bridge and optional horse rides to the falls.',
-        coordinates: [121.3750, 13.2350]
+        image: '/images/bathala/main.jpg',
+        desc: 'An emerging eco-tourism star in Sitio Bathala, this site features a thrilling hanging bridge crossing and the option to reach the falls on horseback. It is a must-visit for those looking to explore the untapped natural beauty of Naujan.',
+        coordinates: [121.3750, 13.2350],
+        gallery: ['/images/bathala/1.jpg']
     },
     {
         id: 'la-familia-cortijo',
         name: 'La Familia Cortijo & Event Place',
         category: 'Events',
         image: '/images/la-familia.jpg',
-        desc: 'A scenic farm-style venue in Brgy. Santiago with landscaped gardens, a pool, and a calamansi farm. Perfect for weddings and reunions.',
+        desc: 'A sophisticated farm-style venue that blends rustic elegance with modern amenities. With its beautifully landscaped gardens, calamansi farm backdrop, and dedicated events hall, it is the premier choice for weddings and grand reunions in Brgy. Santiago.',
         coordinates: [121.3120, 13.3400]
     },
     {
@@ -225,7 +221,7 @@ const attractions = [
         name: 'Darie Tambayan Hotel',
         category: 'Accommodation',
         image: '/images/darie.jpg',
-        desc: 'A friendly guesthouse-style lodging located along the Nautical Highway, offering basic accommodations for travelers exploring Mindoro.',
+        desc: 'Strategically located along the Nautical Highway, this guesthouse is the perfect pitstop for weary travelers. It offers friendly service and clean, basic accommodations for those exploring the wider Mindoro province or passing through Naujan.',
         coordinates: [121.3055, 13.3260]
     },
     {
@@ -233,7 +229,7 @@ const attractions = [
         name: 'El Caviteño Apartelle',
         category: 'Accommodation',
         image: '/images/el-caviteno.jpg',
-        desc: 'Affordable and accessible rooms in Brgy. Estrella, suitable for short-term guests and travelers visiting nearby attractions.',
+        desc: 'Providing affordable and accessible lodging in Brgy. Estrella, this apartelle is designed for short-term guests and backpackers. Its central location makes it a convenient home base for visiting nearby beaches and local landmarks.',
         coordinates: [121.31352692293383, 13.324207214721454]
     },
     {
@@ -241,7 +237,7 @@ const attractions = [
         name: 'Naujan Traveller’s Inn and Resto Bar',
         category: 'Accommodation',
         image: '/images/travellers-inn.jpg',
-        desc: 'A convenient inn in Barcenaga featuring affordable rooms and an on-site restobar serving classic Filipino dishes.',
+        desc: 'Combining comfort with local flavor, this inn in Barcenaga is a popular stop for road-trippers. Beyond its budget-friendly rooms, the on-site restobar is known for serving hearty Filipino comfort food and ice-cold refreshments.',
         coordinates: [121.2990, 13.3190]
     },
     {
@@ -249,16 +245,15 @@ const attractions = [
         name: 'Bahay Tuklasan Plenary Hall',
         category: 'Events',
         image: '/images/bahay-tuklasan-hall.jpg',
-        desc: 'A public conference venue in Brgy. Santiago used for community training, agricultural congresses, and local government events.',
+        desc: 'A cornerstone for community development, this plenary hall hosts significant regional training sessions and agricultural congresses. It serves as a vital venue for local government initiatives and public sector gatherings.',
         coordinates: [121.30076869567007, 13.319883003820582]
     },
     {
-        //not yet finished
         id: 'bahay-tuklasan-dorm',
         name: 'Bahay Tuklasan Dormitory',
         category: 'Accommodation',
         image: '/images/bahay-tuklasan-dorm.jpg',
-        desc: 'Budget-friendly shared quarters near the Plenary Hall, ideal for students, volunteers, and groups visiting Naujan on a budget.',
+        desc: 'Offering practical and budget-friendly shared quarters, this dormitory is ideal for students, NGO volunteers, and large groups. It provides a clean, communal living space close to the town’s key training and agricultural facilities.',
         coordinates: [121.3125, 13.3415]
     }
 ];
