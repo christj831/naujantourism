@@ -87,14 +87,14 @@ const attractions = [
         desc: 'Defined by its simple charm and native kubo cottages, Nabul is a favorite for day-trippers. With clear, shallow waters and a gentle sea breeze, it provides a classic Filipino seaside picnic experience for those looking to unwind without the frills.',
         coordinates: [121.3400, 13.3700]
     },
-    // {
-    //     id: 'villa-cornitz',
-    //     name: 'Villa Cornitz Mini Resort',
-    //     category: 'Resort',
-    //     image: '/images/villa-cornitz.jpg',
-    //     desc: 'A hidden gem in Adrialuna, this mini resort specializes in intimate gatherings. With its well-maintained swimming pools and open-air cabanas, it is a local favorite for family reunions, birthdays, and quick weekend dips.',
-    //     coordinates: [121.2920, 13.3050]
-    // },
+    {
+        id: 'villa-cornitz',
+        name: 'Villa Cornitz Mini Resort',
+        category: 'Resort',
+        image: '/images/cornitz/main.jpg',
+        desc: 'A hidden gem in Adrialuna, this mini resort specializes in intimate gatherings. With its well-maintained swimming pools and open-air cabanas, it is a local favorite for family reunions, birthdays, and quick weekend dips.',
+        coordinates: [121.2920, 13.3050]
+    },
     {
         id: 'la-hacienda',
         name: 'La Hacienda',
