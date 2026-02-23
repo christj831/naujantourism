@@ -294,11 +294,34 @@ section.bg-light {
     background-color: rgba(255,255,255,0.08);
 }
 
-/* Search dropdown category badges - keep visible in dark mode */
-[data-theme="dark"] .dropdown-menu .badge.bg-light {
-    background-color: #495057 !important;
-    color: #e9ecef !important;
-    border-color: rgba(255,255,255,0.2) !important;
+/* Search dropdown: name truncates so badge always fits */
+#searchResultsDropdown .dropdown-item {
+    min-width: 0;
+    gap: 0.5rem;
+}
+#searchResultsDropdown .dropdown-item > span:first-child {
+    flex: 1 1 0%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#searchResultsDropdown .dropdown-item .search-result-badge {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Search dropdown category badges - visible in both themes */
+.search-result-badge {
+    background-color: #f8f9fa;
+    color: #212529;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] .search-result-badge {
+    background-color: #495057;
+    color: #e9ecef;
+    border-color: rgba(255,255,255,0.2);
 }
 
 /* Container and main content */
