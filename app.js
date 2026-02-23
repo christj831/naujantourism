@@ -93,7 +93,7 @@ const attractions = [
         category: 'Resort',
         image: '/images/cornitz/main.jpg',
         desc: 'A hidden gem in Adrialuna, this mini resort specializes in intimate gatherings. With its well-maintained swimming pools and open-air cabanas, it is a local favorite for family reunions, birthdays, and quick weekend dips.',
-        coordinates: [121.2920, 13.3050]
+        coordinates: [121.28580603364726, 13.212563064484101]
     },
     {
         id: 'la-hacienda',
