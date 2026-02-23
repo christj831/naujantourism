@@ -93,7 +93,7 @@ const attractions = [
         id: 'villa-cornitz',
         name: 'Villa Cornitz Mini Resort',
         category: 'Resort',
-        image: '/images/villa-cornitz.jpg',
+        image: '/images/cornitz/main.jpg',
         desc: 'A local mini resort in Adrialuna offering swimming pools and open cottages for family reunions and simple leisure activities.',
         coordinates: [121.2920, 13.3050]
     },
