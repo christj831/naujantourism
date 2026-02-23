@@ -1,0 +1,94 @@
+<%- include('partials/header') %>
+
+<div class="bg-primary py-5 mb-5 text-white text-center">
+    <h1 class="fw-bold">Explore Naujan</h1>
+    <p class="lead">Find your next adventure in our historic town.</p>
+</div>
+
+<div class="container mb-5">
+    
+    <% if (title.includes('Search Results')) { %>
+        <h3 class="mb-4"><%= title %></h3>
+    <% } %>
+
+    <div class="d-flex justify-content-center flex-wrap mb-5 gap-2" id="category-filters">
+        <button class="btn btn-primary rounded-pill filter-btn px-4" data-filter="all">All</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Nature">Nature</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Resort">Resort</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Agri-Tourism">Agri-Tourism</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Accommodation">Accommodation</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Heritage">Heritage</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Events">Events</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Leisure">Leisure</button>
+    </div>
+
+    <div class="row" id="spots-container">
+        <% if (attractions.length > 0) { %>
+            <% attractions.forEach(function(spot, index) { %>
+                
+                <div class="col-12 mb-5 spot-item" data-category="<%= spot.category %>">
+                    
+                    <div class="row align-items-center <%= index % 2 === 0 ? '' : 'flex-row-reverse' %>">
+                        <div class="col-md-6">
+                            <img src="<%= spot.image %>" class="img-fluid rounded-3 shadow" alt="<%= spot.name %>" style="width: 100%; height: 400px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-6 p-5">
+                            <span class="text-primary fw-bold text-uppercase"><%= spot.category %></span>
+                            <h2 class="display-5 fw-bold mt-2"><%= spot.name %></h2>
+                            <p class="lead text-muted"><%= spot.desc %></p>
+                            <a href="/attraction/<%= spot.id %>" class="btn btn-primary rounded-pill px-4">View Map & Details</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="col-12 text-center py-5">
+                <h3 class="text-muted">No tourist spots found matching your search.</h3>
+                <a href="/explore" class="btn btn-outline-primary mt-3">View All Spots</a>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const spots = document.querySelectorAll('.spot-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 1. Update button colors (make clicked button solid, others outline)
+                filterBtns.forEach(b => {
+                    b.classList.remove('btn-primary');
+                    b.classList.add('btn-outline-primary');
+                });
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-primary');
+
+                // 2. Get the category we want to filter by
+                const filterValue = btn.getAttribute('data-filter');
+                
+                // 3. Loop through all spots and hide/show them
+                spots.forEach(spot => {
+                    if (filterValue === 'all' || spot.getAttribute('data-category') === filterValue) {
+                        // Use Bootstrap's fade-in animation by resetting display
+                        spot.style.display = 'block';
+                        spot.style.animation = 'fadeIn 0.5s';
+                    } else {
+                        spot.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+<style>
+    /* Small animation for smooth filtering */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<%- include('partials/footer') %>
