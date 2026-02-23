@@ -22,9 +22,10 @@ const attractions = [
         id: 'simbahang-bato',
         name: 'Simbahang Bato (Bancuro Ruins)', 
         category: 'Heritage', 
-        image: '/images/simbahang-bato.jpg',
+        image: '/images/simbahan/main.jpg',
         desc: 'A hauntingly beautiful relic of the Spanish era, these 17th-century coral and adobe ruins house a "church within a church." Originally built as a fortress against raids, it now serves as a unique open-air sanctuary where history and faith converge among moss-covered walls.',
-        coordinates: [121.32184698287517, 13.281370180034118]
+        coordinates: [121.32184698287517, 13.281370180034118],
+        gallery: ['/images/simbahan/1.jpg']
     },
     { 
         id: 'liwasang-bonifacio',
