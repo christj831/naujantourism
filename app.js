@@ -16,8 +16,7 @@ const attractions = [
         category: 'Nature', 
         image: '/images/lake.jpg', 
         desc: 'As the fifth largest lake in the Philippines, this expansive biodiversity hotspot is a sanctuary for migratory birds and endemic wildlife. Visitors can enjoy serene boat rides across its glass-like waters, framed by lush mountain ranges and breathtaking sunsets.',
-        coordinates: [121.32143932976706, 13.164128472005663],
-        gallery: ['/images/benilda.jpg', '/images/liwasang.jpg', '/images/simbahang-bato.jpg', '/images/lake.jpg']
+        coordinates: [121.32143932976706, 13.164128472005663]
     },
     { 
         id: 'simbahang-bato',
