@@ -251,6 +251,11 @@ h1, h2, h3, .navbar-brand {
 }
 
 [data-theme="dark"] .breadcrumb-item.active {
+    color: var(--text-primary);
+}
+
+/* Breadcrumb separators (e.g. / or >) visible in dark mode */
+[data-theme="dark"] .breadcrumb-item + .breadcrumb-item::before {
     color: var(--text-muted);
 }
 
@@ -271,6 +276,11 @@ section.bg-light {
     color: var(--text-primary);
 }
 
+[data-theme="dark"] .form-control::placeholder {
+    color: #adb5bd;
+    opacity: 1;
+}
+
 [data-theme="dark"] .dropdown-menu {
     background-color: var(--bg-card);
     border-color: var(--border-color);
@@ -282,6 +292,13 @@ section.bg-light {
 
 [data-theme="dark"] .dropdown-item:hover {
     background-color: rgba(255,255,255,0.08);
+}
+
+/* Search dropdown category badges - keep visible in dark mode */
+[data-theme="dark"] .dropdown-menu .badge.bg-light {
+    background-color: #495057 !important;
+    color: #e9ecef !important;
+    border-color: rgba(255,255,255,0.2) !important;
 }
 
 /* Container and main content */
