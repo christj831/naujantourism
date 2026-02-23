@@ -125,7 +125,7 @@ const attractions = [
         category: 'Nature',
         image: '/images/333-steps.jpg',
         desc: 'A rewarding pilgrimage of faith and fitness. The climb up 333 concrete steps takes you through lush vegetation, culminating in a hilltop view that offers a spellbinding panorama of the rolling Melgar landscape and the shimmering coastline.',
-        coordinates: [121.3605, 13.2450]
+        coordinates: [121.35576972975463, 13.275128118318506]
     },
     // {
     //     // id: 'naujan-agri-center',
