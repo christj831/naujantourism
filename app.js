@@ -16,7 +16,8 @@ const attractions = [
         category: 'Nature', 
         image: '/images/lake.jpg', 
         desc: 'As the fifth largest lake in the Philippines, this expansive biodiversity hotspot is a sanctuary for migratory birds and endemic wildlife. Visitors can enjoy serene boat rides across its glass-like waters, framed by lush mountain ranges and breathtaking sunsets.',
-        coordinates: [121.32143932976706, 13.164128472005663]
+        coordinates: [121.32143932976706, 13.164128472005663],
+        gallery: ['/images/benilda.jpg', '/images/liwasang.jpg', '/images/simbahang-bato.jpg', '/images/lake.jpg']
     },
     { 
         id: 'simbahang-bato',
@@ -87,14 +88,14 @@ const attractions = [
         desc: 'Defined by its simple charm and native kubo cottages, Nabul is a favorite for day-trippers. With clear, shallow waters and a gentle sea breeze, it provides a classic Filipino seaside picnic experience for those looking to unwind without the frills.',
         coordinates: [121.3400, 13.3700]
     },
-    {
-        id: 'villa-cornitz',
-        name: 'Villa Cornitz Mini Resort',
-        category: 'Resort',
-        image: '/images/cornitz/main.jpg',
-        desc: 'A hidden gem in Adrialuna, this mini resort specializes in intimate gatherings. With its well-maintained swimming pools and open-air cabanas, it is a local favorite for family reunions, birthdays, and quick weekend dips.',
-        coordinates: [121.28580603364726, 13.212563064484101]
-    },
+    // {
+    //     id: 'villa-cornitz',
+    //     name: 'Villa Cornitz Mini Resort',
+    //     category: 'Resort',
+    //     image: '/images/villa-cornitz.jpg',
+    //     desc: 'A hidden gem in Adrialuna, this mini resort specializes in intimate gatherings. With its well-maintained swimming pools and open-air cabanas, it is a local favorite for family reunions, birthdays, and quick weekend dips.',
+    //     coordinates: [121.2920, 13.3050]
+    // },
     {
         id: 'la-hacienda',
         name: 'La Hacienda',
@@ -125,7 +126,7 @@ const attractions = [
         category: 'Nature',
         image: '/images/333-steps.jpg',
         desc: 'A rewarding pilgrimage of faith and fitness. The climb up 333 concrete steps takes you through lush vegetation, culminating in a hilltop view that offers a spellbinding panorama of the rolling Melgar landscape and the shimmering coastline.',
-        coordinates: [121.35576972975463, 13.275128118318506]
+        coordinates: [121.3605, 13.2450]
     },
     // {
     //     // id: 'naujan-agri-center',
@@ -222,7 +223,11 @@ const attractions = [
         category: 'Accommodation',
         image: '/images/darie.jpg',
         desc: 'Strategically located along the Nautical Highway, this guesthouse is the perfect pitstop for weary travelers. It offers friendly service and clean, basic accommodations for those exploring the wider Mindoro province or passing through Naujan.',
-        coordinates: [121.3055, 13.3260]
+        coordinates: [121.3055, 13.3260],
+        rooms: [
+            { name: 'Standard Room', details: 'Good for 2, fan room', price: '₱800 / night' },
+            { name: 'Family Room', details: 'Good for 4, air-conditioned', price: '₱1,500 / night' }
+        ]
     },
     {
         id: 'el-caviteno',
@@ -230,7 +235,11 @@ const attractions = [
         category: 'Accommodation',
         image: '/images/el-caviteno.jpg',
         desc: 'Providing affordable and accessible lodging in Brgy. Estrella, this apartelle is designed for short-term guests and backpackers. Its central location makes it a convenient home base for visiting nearby beaches and local landmarks.',
-        coordinates: [121.31352692293383, 13.324207214721454]
+        coordinates: [121.31352692293383, 13.324207214721454],
+        rooms: [
+            { name: 'Studio Unit', details: 'With kitchenette', price: '₱1,200 / night' },
+            { name: 'Family Suite', details: 'Good for 5–6 pax', price: '₱2,000 / night' }
+        ]
     },
     {
         id: 'naujan-travellers-inn',
@@ -238,7 +247,16 @@ const attractions = [
         category: 'Accommodation',
         image: '/images/travellers-inn.jpg',
         desc: 'Combining comfort with local flavor, this inn in Barcenaga is a popular stop for road-trippers. Beyond its budget-friendly rooms, the on-site restobar is known for serving hearty Filipino comfort food and ice-cold refreshments.',
-        coordinates: [121.2990, 13.3190]
+        coordinates: [121.2990, 13.3190],
+        rooms: [
+            { name: 'Single Room', details: 'Good for solo traveler', price: '₱900 / night' },
+            { name: 'Double Room', details: 'Good for 2 pax', price: '₱1,300 / night' }
+        ],
+        menu: [
+            { name: 'Silog Meals', details: 'Tapsilog, Longsilog, etc.', price: 'From ₱120' },
+            { name: 'Pulutan Platter', details: 'Good for sharing', price: 'From ₱350' },
+            { name: 'Drinks', details: 'Softdrinks and local beers', price: 'Menu prices vary' }
+        ]
     },
     {
         id: 'bahay-tuklasan-hall',
@@ -254,7 +272,11 @@ const attractions = [
         category: 'Accommodation',
         image: '/images/bahay-tuklasan-dorm.jpg',
         desc: 'Offering practical and budget-friendly shared quarters, this dormitory is ideal for students, NGO volunteers, and large groups. It provides a clean, communal living space close to the town’s key training and agricultural facilities.',
-        coordinates: [121.3125, 13.3415]
+        coordinates: [121.3125, 13.3415],
+        rooms: [
+            { name: 'Dorm Bed', details: 'Shared room, fan', price: '₱350 / head / night' },
+            { name: 'Aircon Dorm', details: 'Shared room, air-conditioned', price: '₱500 / head / night' }
+        ]
     }
 ];
 
