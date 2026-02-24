@@ -354,3 +354,47 @@ section.bg-light {
 .hover-card:hover .card-img-top {
     transform: scale(1.05);
 }
+
+/* ---------- Modal theming (light & dark) ---------- */
+.modal-content {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--border-color);
+}
+
+/* Ensure tables inside modals stay readable in dark mode */
+[data-theme="dark"] .modal .table {
+    /* Force Bootstrap table variables to a high-contrast dark theme */
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: #2d3238;
+    --bs-table-hover-bg: #343a40;
+    --bs-table-color: var(--text-primary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .modal .table thead th {
+    background-color: #2d3238;
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .modal .table tbody td {
+    background-color: transparent;
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+/* Make the close (×) icon visible in dark mode */
+[data-theme="dark"] .modal .btn-close {
+    filter: invert(1);
+}
+
+/* Muted text inside modals should also adapt */
+[data-theme="dark"] .modal .text-muted {
+    color: var(--text-muted) !important;
+}
