@@ -34,6 +34,17 @@
             
             <h1 class="display-4 fw-bold"><%= attraction.name %></h1>
             <span class="badge bg-warning text-dark mb-3 fs-6"><%= attraction.category %></span>
+
+            <% if (attraction.category === 'Accommodation' && ((attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length))) { %>
+                <div class="mb-3">
+                    <button type="button"
+                            class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#accommodationInfoModal">
+                        View <% if (attraction.rooms && attraction.menu) { %>Rooms & Menu<% } else if (attraction.rooms) { %>Rooms<% } else { %>Menu<% } %>
+                    </button>
+                </div>
+            <% } %>
             <% if (attraction.gallery && attraction.gallery.length > 0) { %>
                 <div class="mt-5">
                     <h4 class="fw-bold mb-3">Photo Gallery</h4>
@@ -54,6 +65,7 @@
             <% } %>
             
             <p class="lead mt-3" style="text-align: justify;"><%= attraction.desc %></p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
         </div>
 
         <div class="col-lg-5">
@@ -77,6 +89,76 @@
         </div>
     </div>
 </div>
+
+<% if (attraction.category === 'Accommodation' && ((attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length))) { %>
+<!-- Accommodation Rooms/Menu Modal -->
+<div class="modal fade" id="accommodationInfoModal" tabindex="-1" aria-labelledby="accommodationInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="accommodationInfoModalLabel"><%= attraction.name %> – Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <% if (attraction.rooms && attraction.rooms.length) { %>
+                    <h6 class="fw-bold mb-2">Room Options</h6>
+                    <div class="table-responsive mb-3">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Room</th>
+                                    <th>Description</th>
+                                    <th class="text-end">Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% attraction.rooms.forEach(function(room) { %>
+                                    <tr>
+                                        <td><%= room.name %></td>
+                                        <td><%= room.details %></td>
+                                        <td class="text-end"><%= room.price %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } %>
+
+                <% if (attraction.menu && attraction.menu.length) { %>
+                    <h6 class="fw-bold mb-2 mt-3">Menu Highlights</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Description</th>
+                                    <th class="text-end">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% attraction.menu.forEach(function(item) { %>
+                                    <tr>
+                                        <td><%= item.name %></td>
+                                        <td><%= item.details %></td>
+                                        <td class="text-end"><%= item.price %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } %>
+
+                <% if (!(attraction.rooms && attraction.rooms.length) && !(attraction.menu && attraction.menu.length)) { %>
+                    <p class="mb-0 text-muted">Details will be available soon. Please contact the accommodation directly for the latest room and menu information.</p>
+                <% } %>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
 <script>
