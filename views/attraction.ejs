@@ -102,49 +102,45 @@
             <div class="modal-body">
                 <% if (attraction.rooms && attraction.rooms.length) { %>
                     <h6 class="fw-bold mb-2">Room Options</h6>
-                    <div class="table-responsive mb-3">
-                        <table class="table table-sm align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Room</th>
-                                    <th>Description</th>
-                                    <th class="text-end">Rate</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% attraction.rooms.forEach(function(room) { %>
-                                    <tr>
-                                        <td><%= room.name %></td>
-                                        <td><%= room.details %></td>
-                                        <td class="text-end"><%= room.price %></td>
-                                    </tr>
-                                <% }); %>
-                            </tbody>
-                        </table>
+                    <div class="row g-3 mb-3">
+                        <% attraction.rooms.forEach(function(room) { %>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <% if (room.image) { %>
+                                        <img src="<%= room.image %>" class="card-img-top" alt="<%= room.name %>" style="height: 140px; object-fit: cover;">
+                                    <% } %>
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-1"><%= room.name %></h6>
+                                        <p class="card-text small mb-2"><%= room.details %></p>
+                                        <span class="badge bg-success-subtle text-success-emphasis small px-2 py-1">
+                                            <%= room.price %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
                     </div>
                 <% } %>
 
                 <% if (attraction.menu && attraction.menu.length) { %>
                     <h6 class="fw-bold mb-2 mt-3">Menu Highlights</h6>
-                    <div class="table-responsive">
-                        <table class="table table-sm align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Description</th>
-                                    <th class="text-end">Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% attraction.menu.forEach(function(item) { %>
-                                    <tr>
-                                        <td><%= item.name %></td>
-                                        <td><%= item.details %></td>
-                                        <td class="text-end"><%= item.price %></td>
-                                    </tr>
-                                <% }); %>
-                            </tbody>
-                        </table>
+                    <div class="row g-3">
+                        <% attraction.menu.forEach(function(item) { %>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <% if (item.image) { %>
+                                        <img src="<%= item.image %>" class="card-img-top" alt="<%= item.name %>" style="height: 140px; object-fit: cover;">
+                                    <% } %>
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-1"><%= item.name %></h6>
+                                        <p class="card-text small mb-2"><%= item.details %></p>
+                                        <span class="badge bg-primary-subtle text-primary-emphasis small px-2 py-1">
+                                            <%= item.price %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
                     </div>
                 <% } %>
 
