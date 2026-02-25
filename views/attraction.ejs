@@ -35,13 +35,28 @@
             <h1 class="display-4 fw-bold"><%= attraction.name %></h1>
             <span class="badge bg-warning text-dark mb-3 fs-6"><%= attraction.category %></span>
 
-            <% if (attraction.category === 'Accommodation' && ((attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length))) { %>
+            <% 
+                const hasRoomsOrMenuTop = (attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length);
+                const hasRentTop = attraction.rent && attraction.rent.length;
+                const showAccommodationButton = (attraction.category === 'Accommodation' || attraction.category === 'Resort') && hasRoomsOrMenuTop;
+                const showEventsButton = attraction.category === 'Events' && hasRentTop;
+            %>
+            <% if (showAccommodationButton || showEventsButton) { %>
                 <div class="mb-3">
                     <button type="button"
                             class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm"
                             data-bs-toggle="modal"
                             data-bs-target="#accommodationInfoModal">
-                        View <% if (attraction.rooms && attraction.menu) { %>Rooms & Menu<% } else if (attraction.rooms) { %>Rooms<% } else { %>Menu<% } %>
+                        View 
+                        <% if (attraction.category === 'Events') { %>
+                            Rent
+                        <% } else if (attraction.rooms && attraction.menu) { %>
+                            Rooms & Menu
+                        <% } else if (attraction.rooms) { %>
+                            Rooms
+                        <% } else { %>
+                            Menu
+                        <% } %>
                     </button>
                 </div>
             <% } %>
@@ -65,7 +80,47 @@
             <% } %>
             
             <p class="lead mt-3" style="text-align: justify;"><%= attraction.desc %></p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+
+            <% const hasContact = (attraction.website && (Array.isArray(attraction.website) ? attraction.website.length : attraction.website)) || attraction.phone || attraction.email || attraction.facebook; %>
+            <% if (hasContact) { %>
+            <div class="mt-4 p-3 rounded shadow-sm contact-info-card">
+                <h5 class="fw-bold mb-3"><i class="fas fa-address-card me-2 text-primary"></i>Contact & Info</h5>
+                <ul class="list-unstyled mb-0">
+                    <% if (attraction.website) {
+                        const sites = Array.isArray(attraction.website) ? attraction.website : [attraction.website];
+                        sites.forEach(function(url) { %>
+                    <li class="mb-2">
+                        <a href="<%= url.startsWith('http') ? url : 'https://' + url %>" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                            <i class="fas fa-globe me-2 text-success"></i><%= url.replace(/^https?:\/\//i, '') %>
+                        </a>
+                    </li>
+                    <% }); } %>
+                    <% if (attraction.facebook) {
+                        const fbLinks = Array.isArray(attraction.facebook) ? attraction.facebook : [attraction.facebook];
+                        fbLinks.forEach(function(url) { %>
+                    <li class="mb-2">
+                        <a href="<%= url.startsWith('http') ? url : 'https://' + url %>" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                            <i class="fab fa-facebook me-2" style="color: #1877f2;"></i>Facebook Page
+                        </a>
+                    </li>
+                    <% }); } %>
+                    <% if (attraction.phone) {
+                        const phones = Array.isArray(attraction.phone) ? attraction.phone : [attraction.phone];
+                        phones.forEach(function(p) { %>
+                    <li class="mb-2">
+                        <a href="tel:<%= p.replace(/\s/g, '') %>" class="text-decoration-none"><i class="fas fa-phone me-2 text-primary"></i><%= p %></a>
+                    </li>
+                    <% }); } %>
+                    <% if (attraction.email) {
+                        const emails = Array.isArray(attraction.email) ? attraction.email : [attraction.email];
+                        emails.forEach(function(e) { %>
+                    <li class="mb-2">
+                        <a href="mailto:<%= e %>" class="text-decoration-none"><i class="fas fa-envelope me-2 text-primary"></i><%= e %></a>
+                    </li>
+                    <% }); } %>
+                </ul>
+            </div>
+            <% } %>
         </div>
 
         <div class="col-lg-5">
@@ -90,7 +145,13 @@
     </div>
 </div>
 
-<% if (attraction.category === 'Accommodation' && ((attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length))) { %>
+<% 
+    const hasRoomsOrMenu = (attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length);
+    const hasRent = attraction.rent && attraction.rent.length;
+    const showAccommodationModal = (attraction.category === 'Accommodation' || attraction.category === 'Resort') && hasRoomsOrMenu;
+    const showEventsModal = attraction.category === 'Events' && hasRent;
+%>
+<% if (showAccommodationModal || showEventsModal) { %>
 <!-- Accommodation Rooms/Menu Modal -->
 <div class="modal fade" id="accommodationInfoModal" tabindex="-1" aria-labelledby="accommodationInfoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -100,52 +161,78 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <% if (attraction.rooms && attraction.rooms.length) { %>
-                    <h6 class="fw-bold mb-2">Room Options</h6>
+                <% if (showEventsModal) { %>
+                    <h6 class="fw-bold mb-2">Rental Packages</h6>
                     <div class="row g-3 mb-3">
-                        <% attraction.rooms.forEach(function(room) { %>
+                        <% attraction.rent.forEach(function(r) { %>
                             <div class="col-12 col-md-6 col-lg-4">
                                 <div class="card h-100 shadow-sm border-0">
-                                    <% if (room.image) { %>
-                                        <img src="<%= room.image %>" class="card-img-top" alt="<%= room.name %>" style="height: 140px; object-fit: cover;">
+                                    <% if (r.image) { %>
+                                        <img src="<%= r.image %>" class="card-img-top" alt="<%= r.name %>" style="height: 140px; object-fit: cover;">
                                     <% } %>
                                     <div class="card-body">
-                                        <h6 class="card-title mb-1"><%= room.name %></h6>
-                                        <p class="card-text small mb-2"><%= room.details %></p>
+                                        <h6 class="card-title mb-1"><%= r.name %></h6>
+                                        <% if (r.details) { %>
+                                        <p class="card-text small mb-2"><%= r.details %></p>
+                                        <% } %>
+                                        <% if (r.price) { %>
                                         <span class="badge bg-success-subtle text-success-emphasis small px-2 py-1">
-                                            <%= room.price %>
+                                            <%- r.price.replace(/\n/g, '<br>') %>
                                         </span>
+                                        <% } %>
                                     </div>
                                 </div>
                             </div>
                         <% }); %>
                     </div>
-                <% } %>
-
-                <% if (attraction.menu && attraction.menu.length) { %>
-                    <h6 class="fw-bold mb-2 mt-3">Menu Highlights</h6>
-                    <div class="row g-3">
-                        <% attraction.menu.forEach(function(item) { %>
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <div class="card h-100 shadow-sm border-0">
-                                    <% if (item.image) { %>
-                                        <img src="<%= item.image %>" class="card-img-top" alt="<%= item.name %>" style="height: 140px; object-fit: cover;">
-                                    <% } %>
-                                    <div class="card-body">
-                                        <h6 class="card-title mb-1"><%= item.name %></h6>
-                                        <p class="card-text small mb-2"><%= item.details %></p>
-                                        <span class="badge bg-primary-subtle text-primary-emphasis small px-2 py-1">
-                                            <%= item.price %>
-                                        </span>
+                <% } else { %>
+                    <% if (attraction.rooms && attraction.rooms.length) { %>
+                        <h6 class="fw-bold mb-2">Room Options</h6>
+                        <div class="row g-3 mb-3">
+                            <% attraction.rooms.forEach(function(room) { %>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="card h-100 shadow-sm border-0">
+                                        <% if (room.image) { %>
+                                            <img src="<%= room.image %>" class="card-img-top" alt="<%= room.name %>" style="height: 140px; object-fit: cover;">
+                                        <% } %>
+                                        <div class="card-body">
+                                            <h6 class="card-title mb-1"><%= room.name %></h6>
+                                            <p class="card-text small mb-2"><%= room.details %></p>
+                                            <% if (room.price) { %>
+                                            <span class="badge bg-success-subtle text-success-emphasis small px-2 py-1">
+                                                <%- room.price.replace(/\n/g, '<br>') %>
+                                            </span>
+                                            <% } %>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        <% }); %>
-                    </div>
-                <% } %>
+                            <% }); %>
+                        </div>
+                    <% } %>
 
-                <% if (!(attraction.rooms && attraction.rooms.length) && !(attraction.menu && attraction.menu.length)) { %>
-                    <p class="mb-0 text-muted">Details will be available soon. Please contact the accommodation directly for the latest room and menu information.</p>
+                    <% if (attraction.menu && attraction.menu.length) { %>
+                        <h6 class="fw-bold mb-2 mt-3">Menu Highlights</h6>
+                        <div class="row g-3">
+                            <% attraction.menu.forEach(function(item) { %>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="card h-100 shadow-sm border-0">
+                                        <% if (item.image) { %>
+                                            <img src="<%= item.image %>" class="card-img-top" alt="<%= item.name %>" style="height: 140px; object-fit: cover;">
+                                        <% } %>
+                                        <div class="card-body">
+                                            <h6 class="card-title mb-1"><%= item.name %></h6>
+                                            <p class="card-text small mb-2"><%= item.details %></p>
+                                            <% if (item.price) { %>
+                                            <span class="badge bg-primary-subtle text-primary-emphasis small px-2 py-1">
+                                                <%- item.price.replace(/\n/g, '<br>') %>
+                                            </span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } %>
                 <% } %>
             </div>
             <div class="modal-footer">
