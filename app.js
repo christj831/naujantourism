@@ -245,17 +245,17 @@ const attractions = [
         id: 'naujan-travellers-inn',
         name: 'Naujan Traveller’s Inn and Resto Bar',
         category: 'Accommodation',
-        image: '/images/travellers-inn.jpg',
+        image: '/images/inn/main.jpg',
         desc: 'Combining comfort with local flavor, this inn in Barcenaga is a popular stop for road-trippers. Beyond its budget-friendly rooms, the on-site restobar is known for serving hearty Filipino comfort food and ice-cold refreshments.',
         coordinates: [121.2990, 13.3190],
         rooms: [
-            { name: 'Single Room', details: 'Good for solo traveler', price: '₱900 / night' },
-            { name: 'Double Room', details: 'Good for 2 pax', price: '₱1,300 / night' }
+            { name: 'Single Room', details: 'Good for solo traveler', price: '₱900 / night', image: '/images/inn/1.jpg'},
+            { name: 'Double Room', details: 'Good for 2 pax', price: '₱1,300 / night', image: '/images/inn/2.png'}
         ],
         menu: [
-            { name: 'Silog Meals', details: 'Tapsilog, Longsilog, etc.', price: 'From ₱120' },
-            { name: 'Pulutan Platter', details: 'Good for sharing', price: 'From ₱350' },
-            { name: 'Drinks', details: 'Softdrinks and local beers', price: 'Menu prices vary' }
+            { name: 'Silog Meals', details: 'Tapsilog, Longsilog, etc.', price: 'From ₱120', image: '/images/inn/3.jpg' },
+            { name: 'Pulutan Platter', details: 'Good for sharing', price: 'From ₱350', image: '/images/inn/4.jpg' },
+            { name: 'Drinks', details: 'Softdrinks and local beers', price: 'Menu prices vary', image: '/images/inn/5.jpg' }
         ]
     },
     {
