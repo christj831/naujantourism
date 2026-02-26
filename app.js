@@ -310,7 +310,7 @@ const attractions = [
         name: 'Balay Murraya',
         category: 'Accommodation',
         image: '/images/balai/main.jpg',
-        desc: 'Offering practical and budget-friendly shared quarters, this dormitory is ideal for students, NGO volunteers, and large groups. It provides a clean, communal living space close to the town’s key training and agricultural facilities.',
+        desc: 'A stylish modern homestay surrounded by farms and quiet neighborhood streets, Balay Murraya is designed for families and groups who want a relaxed, homey base in Naujan. With thoughtfully designed rooms and warm local hospitality, it offers a comfortable retreat after a day of exploring nearby natural and cultural attractions.',
         coordinates: [121.27171220105949, 13.271838002910227],
         gallery: ['/images/balai/1.jpg', '/images/balai/2.jpg', '/images/balai/3.jpg', '/images/balai/4.jpg'],
         facebook: 'https://www.facebook.com/profile.php?id=61566762603706',
@@ -334,7 +334,11 @@ app.get('/', (req, res) => {
 // 3. Search Route  
 app.get('/search', (req, res) => {
     // Get the search term from the URL (e.g., ?q=lake)
-    const searchQuery = req.query.q.toLowerCase();
+    const rawQuery = (req.query.q || '').trim();
+    if (!rawQuery) {
+        return res.redirect('/explore');
+    }
+    const searchQuery = rawQuery.toLowerCase();
 
     // Filter the attractions array based on name, category, or description
     const searchResults = attractions.filter(spot => 
@@ -345,7 +349,7 @@ app.get('/search', (req, res) => {
 
     // Render the explore page, but ONLY pass the filtered results
     res.render('explore', { 
-        title: `Search Results for "${req.query.q}"`, 
+        title: `Search Results for "${rawQuery}"`, 
         attractions: searchResults 
     });
 });
