@@ -1,0 +1,280 @@
+<%- include('partials/header') %>
+
+
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+<style>
+    #map { width: 100%; height: 400px; border-radius: 10px; }
+    .marker {
+        background-image: url('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png');
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        
+    }
+    .gallery-img:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+</style>
+
+<div class="container my-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/explore">Explore</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><%= attraction.name %></li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-7">
+            <img src="<%= attraction.image %>" class="img-fluid rounded shadow mb-4" alt="<%= attraction.name %>" decoding="async" style="width: 100%; max-height: 500px; object-fit: cover;">
+            
+            <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+                <div>
+                    <h1 class="display-4 fw-bold mb-2"><%= attraction.name %></h1>
+                    <span class="badge bg-warning text-dark mb-3 fs-6"><%= attraction.category %></span>
+                </div>
+                <button type="button"
+                        class="btn btn-outline-danger rounded-pill px-3 favorite-btn"
+                        data-favorite-id="<%= attraction.id %>"
+                        aria-pressed="false"
+                        title="Save to favorites">
+                    <i class="fa-regular fa-heart me-1" aria-hidden="true"></i>
+                    <span>Save</span>
+                </button>
+            </div>
+
+            <% 
+                const hasRoomsOrMenuTop = (attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length);
+                const hasRentTop = attraction.rent && attraction.rent.length;
+                const showAccommodationButton = (attraction.category === 'Accommodation' || attraction.category === 'Resort') && hasRoomsOrMenuTop;
+                const showEventsButton = attraction.category === 'Event-Place' && hasRentTop;
+            %>
+            <% if (showAccommodationButton || showEventsButton) { %>
+                <div class="mb-3">
+                    <button type="button"
+                            class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#accommodationInfoModal">
+                        View 
+                        <% if (attraction.category === 'Event-Place') { %>
+                            Rent
+                        <% } else if (attraction.rooms && attraction.menu) { %>
+                            Rooms & Menu
+                        <% } else if (attraction.rooms) { %>
+                            Rooms
+                        <% } else { %>
+                            Menu
+                        <% } %>
+                    </button>
+                </div>
+            <% } %>
+            <% if (attraction.gallery && attraction.gallery.length > 0) { %>
+                <div class="mt-5">
+                    <h4 class="fw-bold mb-3">Photo Gallery</h4>
+                    <div class="row g-2">
+                        <% attraction.gallery.forEach(function(photo) { %>
+                            <div class="col-md-4 col-6">
+                                <div class="overflow-hidden rounded shadow-sm">
+                                    
+                                    <a data-fslightbox="gallery" href="<%= photo %>">
+                                        <img src="<%= photo %>" class="img-fluid gallery-img" alt="Gallery Photo for <%= attraction.name %>" loading="lazy" decoding="async" style="width: 100%; height: 120px; object-fit: cover; transition: transform 0.3s ease;">
+                                    </a>
+                                    
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+            
+            <p class="lead mt-3" style="text-align: justify;"><%= attraction.desc %></p>
+
+            <% const hasContact = (attraction.website && (Array.isArray(attraction.website) ? attraction.website.length : attraction.website)) || attraction.phone || attraction.email || attraction.facebook; %>
+            <% if (hasContact) { %>
+            <div class="mt-4 p-3 rounded shadow-sm contact-info-card">
+                <h5 class="fw-bold mb-3"><i class="fas fa-address-card me-2 text-primary"></i>Contact & Info</h5>
+                <ul class="list-unstyled mb-0">
+                    <% if (attraction.website) {
+                        const sites = Array.isArray(attraction.website) ? attraction.website : [attraction.website];
+                        sites.forEach(function(url) { %>
+                    <li class="mb-2">
+                        <a href="<%= url.startsWith('http') ? url : 'https://' + url %>" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                            <i class="fas fa-globe me-2 text-success"></i><%= url.replace(/^https?:\/\//i, '') %>
+                        </a>
+                    </li>
+                    <% }); } %>
+                    <% if (attraction.facebook) {
+                        const fbLinks = Array.isArray(attraction.facebook) ? attraction.facebook : [attraction.facebook];
+                        fbLinks.forEach(function(url) { %>
+                    <li class="mb-2">
+                        <a href="<%= url.startsWith('http') ? url : 'https://' + url %>" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                            <i class="fab fa-facebook me-2" style="color: #1877f2;"></i>Facebook Page
+                        </a>
+                    </li>
+                    <% }); } %>
+                    <% if (attraction.phone) {
+                        const phones = Array.isArray(attraction.phone) ? attraction.phone : [attraction.phone];
+                        phones.forEach(function(p) { %>
+                    <li class="mb-2">
+                        <a href="tel:<%= p.replace(/\s/g, '') %>" class="text-decoration-none"><i class="fas fa-phone me-2 text-primary"></i><%= p %></a>
+                    </li>
+                    <% }); } %>
+                    <% if (attraction.email) {
+                        const emails = Array.isArray(attraction.email) ? attraction.email : [attraction.email];
+                        emails.forEach(function(e) { %>
+                    <li class="mb-2">
+                        <a href="mailto:<%= e %>" class="text-decoration-none"><i class="fas fa-envelope me-2 text-primary"></i><%= e %></a>
+                    </li>
+                    <% }); } %>
+                </ul>
+            </div>
+            <% } %>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
+                <div class="card-body p-0">
+                    <div id="map" data-mapbox-token="<%= typeof mapboxToken !== 'undefined' ? mapboxToken : '' %>"></div>
+                </div>
+                <div class="card-footer bg-white p-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold mb-1">How to get there</h5>
+                        <p class="small text-muted mb-0">Location: Naujan, Oriental Mindoro</p>
+                    </div>
+                    
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=<%= attraction.coordinates[1] %>,<%= attraction.coordinates[0] %>" 
+                       target="_blank" 
+                       class="btn btn-success btn-sm rounded-pill px-3 shadow-sm">
+                       <i class="fas fa-directions me-1"></i> Get Directions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% 
+    const hasRoomsOrMenu = (attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length);
+    const hasRent = attraction.rent && attraction.rent.length;
+    const showAccommodationModal = (attraction.category === 'Accommodation' || attraction.category === 'Resort') && hasRoomsOrMenu;
+    const showEventsModal = attraction.category === 'Event-Place' && hasRent;
+%>
+<% if (showAccommodationModal || showEventsModal) { %>
+<!-- Accommodation Rooms/Menu Modal -->
+<div class="modal fade" id="accommodationInfoModal" tabindex="-1" aria-labelledby="accommodationInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="accommodationInfoModalLabel"><%= attraction.name %> – Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <% if (showEventsModal) { %>
+                    <h6 class="fw-bold mb-2">Rental Packages</h6>
+                    <div class="row g-3 mb-3">
+                        <% attraction.rent.forEach(function(r) { %>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <% if (r.image) { %>
+                                        <img src="<%= r.image %>" class="card-img-top" alt="<%= r.name %>" loading="lazy" decoding="async" style="height: 140px; object-fit: cover;">
+                                    <% } %>
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-1"><%= r.name %></h6>
+                                        <% if (r.details) { %>
+                                        <p class="card-text small mb-2"><%= r.details %></p>
+                                        <% } %>
+                                        <% if (r.price) { %>
+                                        <span class="badge bg-success-subtle text-success-emphasis small px-2 py-1">
+                                            <%- r.price.replace(/\n/g, '<br>') %>
+                                        </span>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <% if (attraction.rooms && attraction.rooms.length) { %>
+                        <h6 class="fw-bold mb-2">Room Options</h6>
+                        <div class="row g-3 mb-3">
+                            <% attraction.rooms.forEach(function(room) { %>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="card h-100 shadow-sm border-0">
+                                        <% if (room.image) { %>
+                                            <img src="<%= room.image %>" class="card-img-top" alt="<%= room.name %>" loading="lazy" decoding="async" style="height: 140px; object-fit: cover;">
+                                        <% } %>
+                                        <div class="card-body">
+                                            <h6 class="card-title mb-1"><%= room.name %></h6>
+                                            <p class="card-text small mb-2"><%= room.details %></p>
+                                            <% if (room.price) { %>
+                                            <span class="badge bg-success-subtle text-success-emphasis small px-2 py-1">
+                                                <%- room.price.replace(/\n/g, '<br>') %>
+                                            </span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } %>
+
+                    <% if (attraction.menu && attraction.menu.length) { %>
+                        <h6 class="fw-bold mb-2 mt-3">Menu Highlights</h6>
+                        <div class="row g-3">
+                            <% attraction.menu.forEach(function(item) { %>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="card h-100 shadow-sm border-0">
+                                        <% if (item.image) { %>
+                                            <img src="<%= item.image %>" class="card-img-top" alt="<%= item.name %>" loading="lazy" decoding="async" style="height: 140px; object-fit: cover;">
+                                        <% } %>
+                                        <div class="card-body">
+                                            <h6 class="card-title mb-1"><%= item.name %></h6>
+                                            <p class="card-text small mb-2"><%= item.details %></p>
+                                            <% if (item.price) { %>
+                                            <span class="badge bg-primary-subtle text-primary-emphasis small px-2 py-1">
+                                                <%- item.price.replace(/\n/g, '<br>') %>
+                                            </span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } %>
+                <% } %>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+<script>
+    var mapboxToken = document.getElementById('map').getAttribute('data-mapbox-token') || '';
+    mapboxgl.accessToken = mapboxToken;
+
+    if (mapboxToken) {
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/outdoors-v12',
+            center: [<%= attraction.coordinates[0] %>, <%= attraction.coordinates[1] %>],
+            zoom: 13
+        });
+        map.addControl(new mapboxgl.NavigationControl());
+        new mapboxgl.Marker({ color: "#FF0000" })
+            .setLngLat([<%= attraction.coordinates[0] %>, <%= attraction.coordinates[1] %>])
+            .setPopup(new mapboxgl.Popup().setHTML("<h5><%= attraction.name %></h5>"))
+            .addTo(map);
+    } else {
+        document.getElementById('map').innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 bg-light rounded"><p class="text-muted mb-0">Set MAPBOX_ACCESS_TOKEN in your environment to show the map.</p></div>';
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.js"></script>
+<%- include('partials/footer') %>
