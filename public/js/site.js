@@ -53,14 +53,6 @@
     el.classList.add('hidden');
   }
 
-  function wireLoader() {
-    if (document.readyState === 'complete') {
-      hidePageLoader();
-      return;
-    }
-    window.addEventListener('load', hidePageLoader);
-  }
-
   function wireFavoriteClicks() {
     document.addEventListener('click', (e) => {
       const btn = e.target.closest('.favorite-btn[data-favorite-id]');
@@ -74,7 +66,7 @@
   }
 
   function init() {
-    wireLoader();
+    hidePageLoader();
     updateFavoriteButtons();
     wireFavoriteClicks();
   }
