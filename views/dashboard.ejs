@@ -1,0 +1,96 @@
+<%- include('partials/header') %>
+
+<script>
+(function() {
+    if (localStorage.getItem('role') !== 'admin') {
+        window.location.replace('/');
+        return;
+    }
+})();
+</script>
+
+<div class="bg-primary py-5 mb-4 text-white text-center analytics-hero">
+    <h1 class="fw-bold">Analytics Dashboard</h1>
+    <p class="lead mb-0">Attraction page visits — see what’s most popular.</p>
+</div>
+
+<div class="container mb-5 dashboard-page">
+    <div class="row g-4 mb-4 align-items-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-4">
+                    <p class="text-muted text-uppercase small mb-1">Total page views (all attractions)</p>
+                    <h2 class="display-4 fw-bold text-primary mb-0"><%= totalVisits %></h2>
+                    <% if (typeof lastResetAt !== 'undefined' && lastResetAt) { %>
+                        <p class="text-muted small mt-2 mb-0">Counts reset: <%= new Date(lastResetAt).toLocaleDateString() %> — auto-reset every 30 days</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <form action="/dashboard/reset" method="post" class="d-inline" onsubmit="return confirm('Reset all visit counts? This cannot be undone.');">
+                <button type="submit" class="btn btn-outline-danger">
+                    <i class="fas fa-rotate-left me-1" aria-hidden="true"></i> Reset counts
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <h2 class="h4 fw-bold mb-3">Most visited attractions</h2>
+    <p class="text-muted mb-4">Sorted by number of visits. Each time someone opens an attraction page, that visit is counted.</p>
+
+    <% const top = attractionsWithVisits.slice(0, 3); %>
+    <% if (top.some(a => a.visits > 0)) { %>
+        <div class="row g-3 mb-4">
+            <% top.forEach((attraction, i) => { %>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                        <div class="position-relative">
+                            <img src="<%= attraction.image %>" class="card-img-top" alt="<%= attraction.name %>" style="height: 160px; object-fit: cover;">
+                            <span class="position-absolute top-0 start-0 m-2 badge bg-dark fs-6">#<%= i + 1 %></span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold"><%= attraction.name %></h5>
+                            <span class="badge bg-secondary mb-2"><%= attraction.category %></span>
+                            <p class="card-text mb-0"><strong><%= attraction.visits %></strong> visits</p>
+                            <a href="/attraction/<%= attraction.id %>" class="btn btn-sm btn-outline-primary mt-2">View page</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>
+
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 dashboard-table">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-3">#</th>
+                        <th>Attraction</th>
+                        <th>Category</th>
+                        <th class="text-end pe-3">Visits</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% attractionsWithVisits.forEach((attraction, index) => { %>
+                        <tr>
+                            <td class="ps-3 fw-semibold text-muted"><%= index + 1 %></td>
+                            <td>
+                                <a href="/attraction/<%= attraction.id %>" class="text-decoration-none fw-medium"><%= attraction.name %></a>
+                            </td>
+                            <td><span class="badge bg-light text-dark"><%= attraction.category %></span></td>
+                            <td class="text-end pe-3 fw-semibold"><%= attraction.visits %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-4 text-muted small">
+        <p class="mb-0">Visit counts are stored in <code>data/visits.json</code> and persist across server restarts. Counts auto-reset every 30 days, or use <strong>Reset counts</strong> to clear them now.</p>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

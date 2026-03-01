@@ -1,0 +1,151 @@
+<%- include('partials/header') %>
+
+<script>(function(){ try { localStorage.removeItem('role'); } catch (e) {} })();</script>
+
+<div class="bg-primary py-5 mb-5 text-white text-center">
+    <h1 class="fw-bold">Explore Naujan</h1>
+    <p class="lead">Find your next adventure in our historic town.</p>
+</div>
+
+<div class="container mb-5">
+    
+    <% if (title.includes('Search Results')) { %>
+        <h3 class="mb-4"><%= title %></h3>
+    <% } %>
+
+    <div class="d-flex justify-content-center flex-wrap mb-5 gap-2" id="category-filters">
+        <button class="btn btn-primary rounded-pill filter-btn px-4" data-filter="all">All</button>
+        <button class="btn btn-outline-danger rounded-pill filter-btn px-4" data-filter="favorites" id="favoritesFilterBtn" title="Show saved places">
+            <i class="fa-solid fa-heart me-1" aria-hidden="true"></i>
+            Favorites <span class="badge text-bg-light ms-1" id="favoritesCount">0</span>
+        </button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Nature">Nature</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Resort">Resort</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Agri-Tourism">Agri-Tourism</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Accommodation">Accommodation</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Heritage">Heritage</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Event-Place">Events Place</button>
+        <button class="btn btn-outline-primary rounded-pill filter-btn px-4" data-filter="Leisure">Leisure</button>
+    </div>
+
+    <div class="row" id="spots-container">
+        <% if (attractions.length > 0) { %>
+            <% attractions.forEach(function(spot, index) { %>
+                
+                <div class="col-12 mb-5 spot-item" data-category="<%= spot.category %>" data-id="<%= spot.id %>">
+                    
+                    <div class="row align-items-center <%= index % 2 === 0 ? '' : 'flex-row-reverse' %>">
+                        <div class="col-md-6">
+                            <img src="<%= spot.image %>" class="img-fluid rounded-3 shadow" alt="<%= spot.name %>" loading="lazy" decoding="async" style="width: 100%; height: 400px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-6 p-5">
+                            <span class="text-primary fw-bold text-uppercase"><%= spot.category %></span>
+                            <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+                                <h2 class="display-5 fw-bold mt-2 mb-0"><%= spot.name %></h2>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-danger rounded-pill px-3 favorite-btn"
+                                        data-favorite-id="<%= spot.id %>"
+                                        aria-pressed="false"
+                                        title="Save to favorites">
+                                    <i class="fa-regular fa-heart me-1" aria-hidden="true"></i>
+                                    <span class="favorite-btn-label">Save</span>
+                                </button>
+                            </div>
+                            <p class="lead text-muted"><%= spot.desc %></p>
+                            <a href="/attraction/<%= spot.id %>" class="btn btn-primary rounded-pill px-4">View Map & Details</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="col-12 text-center py-5">
+                <h3 class="text-muted">No tourist spots found matching your search.</h3>
+                <a href="/explore" class="btn btn-outline-primary mt-3">View All Spots</a>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const spots = document.querySelectorAll('.spot-item');
+
+        function getFavorites() {
+            try {
+                const raw = localStorage.getItem('naujan:favorites');
+                const parsed = raw ? JSON.parse(raw) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function setFavorites(ids) {
+            localStorage.setItem('naujan:favorites', JSON.stringify(Array.from(new Set(ids))));
+        }
+
+        function updateFavoriteUI() {
+            const favs = new Set(getFavorites());
+            const favCountEl = document.getElementById('favoritesCount');
+            if (favCountEl) favCountEl.textContent = String(favs.size);
+        }
+
+        function applyFilter(filterValue) {
+            const favs = new Set(getFavorites());
+            spots.forEach(spot => {
+                const category = spot.getAttribute('data-category');
+                const id = spot.getAttribute('data-id');
+                const shouldShow =
+                    filterValue === 'all' ||
+                    (filterValue === 'favorites' && favs.has(id)) ||
+                    category === filterValue;
+
+                if (shouldShow) {
+                    spot.style.display = 'block';
+                    spot.style.animation = 'fadeIn 0.5s';
+                } else {
+                    spot.style.display = 'none';
+                }
+            });
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 1. Update button colors (make clicked button solid, others outline)
+                filterBtns.forEach(b => {
+                    b.classList.remove('btn-primary');
+                    b.classList.add(b.getAttribute('data-filter') === 'favorites' ? 'btn-outline-danger' : 'btn-outline-primary');
+                });
+                btn.classList.remove(btn.getAttribute('data-filter') === 'favorites' ? 'btn-outline-danger' : 'btn-outline-primary');
+                btn.classList.add('btn-primary');
+
+                // 2. Get the category we want to filter by
+                const filterValue = btn.getAttribute('data-filter');
+                
+                // 3. Loop through all spots and hide/show them
+                applyFilter(filterValue);
+            });
+        });
+
+        // Keep favorites count and filter results in sync with global favorites changes
+        window.addEventListener('favorites:changed', () => {
+            updateFavoriteUI();
+            const activeFilter = document.querySelector('.filter-btn.btn-primary');
+            const activeValue = activeFilter ? activeFilter.getAttribute('data-filter') : 'all';
+            applyFilter(activeValue || 'all');
+        });
+
+        updateFavoriteUI();
+    });
+</script>
+
+<style>
+    /* Small animation for smooth filtering */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<%- include('partials/footer') %>
