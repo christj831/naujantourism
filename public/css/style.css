@@ -425,6 +425,61 @@ section.bg-light {
     color: var(--text-muted) !important;
 }
 
+/* ---------- Analytics dashboard ---------- */
+.dashboard-page .card {
+    border-radius: 0.85rem;
+}
+
+.dashboard-page .card-body h2.display-4 {
+    font-size: 2.5rem;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+[data-theme="dark"] .dashboard-table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: #2d3238;
+    --bs-table-hover-bg: #343a40;
+    --bs-table-color: var(--text-primary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .dashboard-table thead th {
+    background-color: #2d3238;
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .dashboard-table tbody td {
+    background-color: transparent;
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+/* Make category badges readable in dark mode */
+[data-theme="dark"] .dashboard-table .badge.bg-light.text-dark {
+    background-color: #495057 !important;
+    color: #f8f9fa !important;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+@media (max-width: 767.98px) {
+    .dashboard-page .row.g-4.align-items-center {
+        text-align: center;
+    }
+    .dashboard-page .col-md-4.text-md-end {
+        text-align: center !important;
+        margin-top: 1rem;
+    }
+    .dashboard-page .card-body h2.display-4 {
+        font-size: 2.1rem;
+    }
+}
+
 /* ---------- Favorites (Saved Places) ---------- */
 .favorite-btn {
     white-space: nowrap;
