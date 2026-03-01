@@ -2,11 +2,94 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
+const fs = require('fs');
 const port = 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// --- Visit tracking (persisted to data/visits.json) ---
+const VISITS_FILE = path.join(__dirname, 'data', 'visits.json');
+const RESET_AFTER_DAYS = 30;
+let visitCounts = {}; // { attractionId: number }
+let lastResetAt = null; // Date string (ISO) when counts were last reset
+
+function loadVisits() {
+    try {
+        const dir = path.dirname(VISITS_FILE);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        if (fs.existsSync(VISITS_FILE)) {
+            const data = JSON.parse(fs.readFileSync(VISITS_FILE, 'utf8'));
+            if (data.counts !== undefined && data.lastReset !== undefined) {
+                visitCounts = data.counts || {};
+                lastResetAt = data.lastReset || null;
+            } else {
+                visitCounts = data && typeof data === 'object' && !Array.isArray(data) ? data : {};
+                lastResetAt = new Date().toISOString();
+                saveVisits();
+            }
+        }
+        maybeResetIfMonthPassed();
+    } catch (e) {
+        visitCounts = {};
+    }
+}
+
+function saveVisits() {
+    try {
+        const dir = path.dirname(VISITS_FILE);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(VISITS_FILE, JSON.stringify({
+            lastReset: lastResetAt || new Date().toISOString(),
+            counts: visitCounts
+        }, null, 2), 'utf8');
+    } catch (e) {
+        console.warn('Could not save visit counts:', e.message);
+    }
+}
+
+/** If last reset was more than RESET_AFTER_DAYS ago, clear counts and set new reset date. */
+function maybeResetIfMonthPassed() {
+    if (!lastResetAt) {
+        lastResetAt = new Date().toISOString();
+        saveVisits();
+        return;
+    }
+    const then = new Date(lastResetAt).getTime();
+    const now = Date.now();
+    const daysSince = (now - then) / (1000 * 60 * 60 * 24);
+    if (daysSince >= RESET_AFTER_DAYS) {
+        visitCounts = {};
+        lastResetAt = new Date().toISOString();
+        saveVisits();
+    }
+}
+
+/** Manually reset all visit counts and set lastReset to now. */
+function resetVisits() {
+    visitCounts = {};
+    lastResetAt = new Date().toISOString();
+    saveVisits();
+}
+
+/** Record one visit for an attraction by id. Call this when someone views the attraction page. */
+function recordVisit(attractionId) {
+    if (!attractionId) return;
+    maybeResetIfMonthPassed();
+    visitCounts[attractionId] = (visitCounts[attractionId] || 0) + 1;
+    saveVisits();
+}
+
+/** Get all attractions with their visit counts, sorted by visits descending (most visited first). */
+function getAttractionsWithVisits() {
+    return attractions.map(a => ({
+        ...a,
+        visits: visitCounts[a.id] || 0
+    })).sort((a, b) => b.visits - a.visits);
+}
+
+loadVisits();
 
 // Mock Data: Real spots in Naujan, Oriental Mindoro
 const attractions = [
@@ -323,11 +406,12 @@ const attractions = [
     }
 ];
 
-// 1. Home Page (Hero Video/Banner style)
+// 1. Home Page (Hero Video/Banner style) — Top Attractions = most visited from visits.json
 app.get('/', (req, res) => {
+    const topByVisits = getAttractionsWithVisits().slice(0, 3);
     res.render('index', { 
         title: 'Visit Naujan - Oriental Mindoro',
-        featured: attractions.slice(0, 3) // Show top 3 on home
+        featured: topByVisits.length ? topByVisits : attractions.slice(0, 3) // fallback if no visit data yet
     });
 });
 
@@ -389,11 +473,30 @@ app.get('/attraction/:id', (req, res) => {
         return res.status(404).render('404', { title: 'Not Found' });
     }
 
+    recordVisit(req.params.id);
+
     res.render('attraction', { 
         title: `${attraction.name} - Visit Naujan`,
         attraction: attraction,
         mapboxToken: process.env.MAPBOX_ACCESS_TOKEN || ''
     });
+});
+
+// Dashboard: most visited attractions
+app.get('/dashboard', (req, res) => {
+    const attractionsWithVisits = getAttractionsWithVisits();
+    const totalVisits = attractionsWithVisits.reduce((sum, a) => sum + a.visits, 0);
+    res.render('dashboard', {
+        title: 'Analytics Dashboard - Visit Naujan',
+        attractionsWithVisits,
+        totalVisits,
+        lastResetAt
+    });
+});
+
+app.post('/dashboard/reset', (req, res) => {
+    resetVisits();
+    res.redirect('/dashboard');
 });
 
 app.listen(port, () => {
