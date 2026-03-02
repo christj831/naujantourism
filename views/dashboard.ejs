@@ -36,6 +36,15 @@
         </div>
     </div>
 
+    <div class="card border-0 shadow-sm mb-5">
+        <div class="card-body py-4">
+            <h3 class="h5 fw-bold mb-3">Visits Overview</h3>
+            <div class="chart-container">
+                <canvas id="visitsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
     <h2 class="h4 fw-bold mb-3">Most visited attractions</h2>
     <p class="text-muted mb-4">Sorted by number of visits. Each time someone opens an attraction page, that visit is counted.</p>
 
@@ -92,5 +101,80 @@
         <p class="mb-0">Visit counts are stored in <code>data/visits.json</code> and persist across server restarts. Counts auto-reset every 30 days, or use <strong>Reset counts</strong> to clear them now.</p>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Safely inject the EJS data into JavaScript
+    const chartData = <%- JSON.stringify(attractionsWithVisits || []) %>;
+    
+    // Extract labels (names) and data (visit counts)
+    const labels = chartData.map(item => item.name);
+    const data = chartData.map(item => item.visits);
+
+    const ctx = document.getElementById('visitsChart').getContext('2d');
+    
+    // Helper function to figure out the right colors based on the current theme
+    function getThemeColors() {
+        const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+        return {
+            textColor: isDarkMode ? '#adb5bd' : '#6c757d',
+            gridColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+        };
+    }
+
+    let colors = getThemeColors();
+
+    const visitsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Visits',
+                data: data,
+                backgroundColor: 'rgba(13, 110, 253, 0.8)',
+                borderColor: '#0d6efd',
+                borderWidth: 1,
+                borderRadius: 4,
+                hoverBackgroundColor: '#0a58ca'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { padding: 10, cornerRadius: 8 }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: colors.textColor, precision: 0 },
+                    grid: { color: colors.gridColor }
+                },
+                x: {
+                    ticks: { color: colors.textColor },
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+
+    // Listen for dark mode toggle clicks so the chart updates instantly
+    const themeToggleBtn = document.querySelector('.theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            // Wait 50ms to let the HTML tag update its data-theme attribute
+            setTimeout(() => {
+                const newColors = getThemeColors();
+                visitsChart.options.scales.y.ticks.color = newColors.textColor;
+                visitsChart.options.scales.y.grid.color = newColors.gridColor;
+                visitsChart.options.scales.x.ticks.color = newColors.textColor;
+                visitsChart.update();
+            }, 50);
+        });
+    }
+});
+</script>
 
 <%- include('partials/footer') %>
