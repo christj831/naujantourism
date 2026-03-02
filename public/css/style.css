@@ -513,3 +513,16 @@ section.bg-light {
     visibility: hidden;
     pointer-events: none;
 }
+
+/* ---------- Chart Container ---------- */
+.chart-container {
+    position: relative;
+    height: 350px; /* Forces a consistent height for the chart */
+    width: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .chart-container {
+        height: 250px; /* Slightly shorter on mobile devices */
+    }
+}
