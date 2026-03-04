@@ -12,25 +12,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // --- Firebase Initialization ---
-let serviceAccount;
+let adminConfig;
 
-if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
-    // Best practice for Vercel: Decode Base64 string to prevent newline corruption
-    const decoded = Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf-8');
-    serviceAccount = JSON.parse(decoded);
-} else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-    // Fallback for standard JSON environment variable
-    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+if (process.env.FIREBASE_PRIVATE_KEY) {
+    // Vercel Production
+    adminConfig = {
+        credential: admin.credential.cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            // This replace fixes Vercel's habit of escaping newlines
+            privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        }),
+        databaseURL: 'https://naujantourism-ad6a6-default-rtdb.firebaseio.com/'
+    };
 } else {
-    // Used for local development
-    serviceAccount = require('./firebase-key.json');
+    // Local Development
+    const serviceAccount = require('./firebase-key.json');
+    adminConfig = {
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: 'https://naujantourism-ad6a6-default-rtdb.firebaseio.com/'
+    };
 }
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://naujantourism-ad6a6-default-rtdb.firebaseio.com/'
-});
+admin.initializeApp(adminConfig);
 const db = admin.database();
 
 // --- Visit tracking (persisted to Firebase RTDB) ---
