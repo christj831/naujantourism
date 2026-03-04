@@ -187,7 +187,7 @@ const attractions = [
         highlights: 'The lively, green heart of Naujan, perfect for leisurely strolls and vibrant community festivals.',
         uniqueHighlight: 'Naujan’s vibrant "living room," seamlessly blending lively cultural shows, civic events, and laid-back everyday local life.',
         name: 'Liwasang Bonifacio',
-        category: 'Leisure',
+        category: 'Heritage',
         image: '/images/liwasang.jpg',
         desc: 'Feel the pulse of Naujan at its vibrant town plaza. Surrounded by manicured greenery, this inviting open space is the perfect backdrop for leisurely afternoon strolls, lively community festivals, and experiencing the warm, everyday charm of local life.',
         coordinates: [121.3030, 13.3242]
