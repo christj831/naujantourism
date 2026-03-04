@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
-const fs = require('fs');
 const https = require('https');
 const admin = require('firebase-admin');
 const port = 3000;
@@ -71,10 +70,10 @@ function saveVisits() {
 }
 
 /** If last reset was more than RESET_AFTER_DAYS ago, clear counts and set new reset date. */
-function maybeResetIfMonthPassed() {
+async function maybeResetIfMonthPassed() {
     if (!lastResetAt) {
         lastResetAt = new Date().toISOString();
-        saveVisits();
+        await saveVisits();
         return;
     }
     const then = new Date(lastResetAt).getTime();
@@ -83,23 +82,23 @@ function maybeResetIfMonthPassed() {
     if (daysSince >= RESET_AFTER_DAYS) {
         visitCounts = {};
         lastResetAt = new Date().toISOString();
-        saveVisits();
+        await saveVisits();
     }
 }
 
 /** Manually reset all visit counts and set lastReset to now. */
-function resetVisits() {
+async function resetVisits() {
     visitCounts = {};
     lastResetAt = new Date().toISOString();
-    return saveVisits();
+    return await saveVisits();
 }
 
 /** Record one visit for an attraction by id. Call this when someone views the attraction page. */
-function recordVisit(attractionId) {
+async function recordVisit(attractionId) {
     if (!attractionId) return;
-    maybeResetIfMonthPassed();
+    await maybeResetIfMonthPassed();
     visitCounts[attractionId] = (visitCounts[attractionId] || 0) + 1;
-    saveVisits();
+    await saveVisits(); // Ensure Vercel waits for Firebase to save
 }
 
 // --- Favorites and Ratings tracking (persisted to Firebase RTDB) ---
@@ -132,9 +131,9 @@ function saveFavs() {
 }
 
 /** Manually reset all favorites and ratings */
-function resetFavs() {
+async function resetFavs() {
     favData = {};
-    return saveFavs();
+    return await saveFavs();
 }
 
 function getAttractionStats(id) {
@@ -823,7 +822,8 @@ app.get('/attraction/:id', async (req, res) => {
         return res.status(404).render('404', { title: 'Not Found' });
     }
 
-    recordVisit(req.params.id);
+    // AWAIT added here
+    await recordVisit(req.params.id);
 
     const weather = await getWeatherForAttraction(attraction);
     const stats = getAttractionStats(attraction.id);
@@ -837,7 +837,7 @@ app.get('/attraction/:id', async (req, res) => {
     });
 });
 
-app.post('/api/rate/:id', (req, res) => {
+app.post('/api/rate/:id', async (req, res) => {
     const id = req.params.id;
     const attraction = attractions.find(a => a.id === id);
     if (!attraction) return res.status(404).json({ error: 'Not found' });
@@ -850,12 +850,14 @@ app.post('/api/rate/:id', (req, res) => {
     if (!favData[id]) favData[id] = { favorites: 0, ratingSum: 0, ratingCount: 0 };
     favData[id].ratingSum += rating;
     favData[id].ratingCount += 1;
-    saveFavs();
+    
+    // AWAIT added here
+    await saveFavs();
 
     res.json(getAttractionStats(id));
 });
 
-app.post('/api/favorite/:id', (req, res) => {
+app.post('/api/favorite/:id', async (req, res) => {
     const id = req.params.id;
     const attraction = attractions.find(a => a.id === id);
     if (!attraction) return res.status(404).json({ error: 'Not found' });
@@ -869,7 +871,9 @@ app.post('/api/favorite/:id', (req, res) => {
         favData[id].favorites = Math.max(0, favData[id].favorites - 1);
     }
 
-    saveFavs();
+    // AWAIT added here
+    await saveFavs();
+    
     res.json(getAttractionStats(id));
 });
 
@@ -889,17 +893,18 @@ app.get('/dashboard', (req, res) => {
     });
 });
 
-app.post('/dashboard/reset', (req, res) => {
+app.post('/dashboard/reset', async (req, res) => {
     console.log('Received POST /dashboard/reset');
-    // Removed 'await' so the server doesn't hang waiting for the Firebase connection
-    resetVisits();
+    // AWAIT added back. While awaiting might have caused local hangs before, 
+    // it is necessary on Vercel to ensure the operation completes.
+    await resetVisits();
     res.redirect('/dashboard');
 });
 
-app.post('/dashboard/reset-favs', (req, res) => {
+app.post('/dashboard/reset-favs', async (req, res) => {
     console.log('Received POST /dashboard/reset-favs');
-    // Removed 'await' so the server doesn't hang waiting for the Firebase connection
-    resetFavs();
+    // AWAIT added back.
+    await resetFavs();
     res.redirect('/dashboard');
 });
 
