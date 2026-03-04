@@ -146,7 +146,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Safely inject the EJS data into JavaScript
-            const chartData = JSON.parse(`<%- JSON.stringify(attractionsWithVisits || []) %>`);
+            const chartData = <%- JSON.stringify(attractionsWithVisits || []) %>;
 
             // Extract labels (names) and data (visit counts)   
             const labels = chartData.map(item => item.name);
