@@ -98,7 +98,15 @@ async function recordVisit(attractionId) {
     if (!attractionId) return;
     await maybeResetIfMonthPassed();
     visitCounts[attractionId] = (visitCounts[attractionId] || 0) + 1;
-    await saveVisits(); // Ensure Vercel waits for Firebase to save
+    
+    // Create a 1.5-second timeout to prevent the page from hanging if Firebase fails
+    const timeoutPromise = new Promise(resolve => setTimeout(() => {
+        console.warn('Firebase save timed out, skipping to load page.');
+        resolve();
+    }, 1500));
+
+    // Race the Firebase save against the 1.5 second timeout
+    await Promise.race([saveVisits(), timeoutPromise]); 
 }
 
 // --- Favorites and Ratings tracking (persisted to Firebase RTDB) ---
