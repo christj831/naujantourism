@@ -889,15 +889,17 @@ app.get('/dashboard', (req, res) => {
     });
 });
 
-app.post('/dashboard/reset', async (req, res) => {
+app.post('/dashboard/reset', (req, res) => {
     console.log('Received POST /dashboard/reset');
-    await resetVisits();
+    // Removed 'await' so the server doesn't hang waiting for the Firebase connection
+    resetVisits();
     res.redirect('/dashboard');
 });
 
-app.post('/dashboard/reset-favs', async (req, res) => {
+app.post('/dashboard/reset-favs', (req, res) => {
     console.log('Received POST /dashboard/reset-favs');
-    await resetFavs();
+    // Removed 'await' so the server doesn't hang waiting for the Firebase connection
+    resetFavs();
     res.redirect('/dashboard');
 });
 
