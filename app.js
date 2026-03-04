@@ -596,7 +596,10 @@ const attractions = [
         id: 'bistro-amparo',
         name: 'Bistro Amparo',
         category: 'Food / Resto',
-        coordinates: [121.30076869567007, 13.319883003820582],
+        image: "/images/bistro/main.jpg",
+        coordinates: [121.22478519996423, 13.276361916243165],
+        facebook: "https://www.facebook.com/BistroAmparo",
+        openingHours: '10:00 - 20:00'
     },
     {
         id: 'EUT',
@@ -620,7 +623,11 @@ const attractions = [
         id: 'suarez-farm',
         name: 'Suarez Farm',
         category: 'Food / Resto',
-        coordinates: [121.30076869567007, 13.319883003820582],
+        image: "/images/suarez/main.jpg",
+        coordinates: [121.28404673658255, 13.327410188001998],
+        facebook: "https://www.facebook.com/SuarezFarms",
+        openingHours: '10:00 - 21:00',
+        email: "suarezfarmz.agri@gmail.com"
     },
     {
         id: 'melbourne-lomi-house',
