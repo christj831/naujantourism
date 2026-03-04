@@ -874,6 +874,11 @@ app.post('/api/favorite/:id', (req, res) => {
 });
 
 app.get('/dashboard', (req, res) => {
+    // Add these headers to prevent caching on Vercel and the browser
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    
     const attractionsWithVisits = getAttractionsWithVisits();
     const totalVisits = attractionsWithVisits.reduce((sum, a) => sum + a.visits, 0);
     res.render('dashboard', {
