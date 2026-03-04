@@ -16,6 +16,10 @@ let serviceAccount;
 if (process.env.FIREBASE_SERVICE_ACCOUNT) {
     // Used in Vercel via Environment Variables
     serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    
+    // ADD THIS LINE: Fix Vercel's newline formatting issue
+    serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+    
 } else {
     // Used for local development
     serviceAccount = require('./firebase-key.json');
