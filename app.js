@@ -13,13 +13,15 @@ app.use(express.json());
 
 // --- Firebase Initialization ---
 let serviceAccount;
-if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-    // Used in Vercel via Environment Variables
+
+if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
+    // Best practice for Vercel: Decode Base64 string to prevent newline corruption
+    const decoded = Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf-8');
+    serviceAccount = JSON.parse(decoded);
+} else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    // Fallback for standard JSON environment variable
     serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    
-    // ADD THIS LINE: Fix Vercel's newline formatting issue
     serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
-    
 } else {
     // Used for local development
     serviceAccount = require('./firebase-key.json');
