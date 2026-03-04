@@ -13,7 +13,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // --- Firebase Initialization ---
-const serviceAccount = require('./firebase-key.json');
+let serviceAccount;
+if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    // Used in Vercel via Environment Variables
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+} else {
+    // Used for local development
+    serviceAccount = require('./firebase-key.json');
+}
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://naujantourism-ad6a6-default-rtdb.firebaseio.com/'
@@ -888,6 +896,11 @@ app.post('/dashboard/reset-favs', async (req, res) => {
     res.redirect('/dashboard');
 });
 
-app.listen(port, () => {
-    console.log(`Naujan Tourism Site running at http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`Naujan Tourism Site running at http://localhost:${port}`);
+    });
+}
+
+// Required for Vercel to recognize the Express app
+module.exports = app;
