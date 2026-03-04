@@ -349,7 +349,7 @@ const attractions = [
         highlights: 'A blissful seaside dining spot serving mouth-watering local delicacies against an unobstructed ocean horizon.',
         uniqueHighlight: 'Your ultimate coastal lounge—enjoy incredible drinks and eats while the crashing waves and sea breeze provide the perfect natural soundtrack.',
         name: 'Hafa Adai',
-        category: 'Leisure',
+        category: 'Resort',
         image: '/images/hafa-adai.jpg',
         desc: 'Savor the ultimate seaside chill at Hafa Adai. Enjoy an unforgettable dining experience where you can feast on delicious local delicacies and cold drinks, all while soaking in an unobstructed, horizon-stretching view of the sea accompanied by a soothing ocean breeze.',
         coordinates: [121.31022214428944, 13.331900799869143]
