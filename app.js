@@ -885,17 +885,32 @@ app.post('/api/rate/:id', async (req, res) => {
     if (!attraction) return res.status(404).json({ error: 'Not found' });
 
     const rating = parseInt(req.body.rating, 10);
+    const { deviceId } = req.body;
+
     if (isNaN(rating) || rating < 1 || rating > 5) {
         return res.status(400).json({ error: 'Invalid rating' });
     }
 
-    if (!favData[id]) favData[id] = { favorites: 0, ratingSum: 0, ratingCount: 0 };
-    favData[id].ratingSum += rating;
-    favData[id].ratingCount += 1;
-    
-    // AWAIT added here
-    await saveFavs();
+    // Ensure the data structure exists
+    if (!favData[id]) favData[id] = { favorites: 0, ratingSum: 0, ratingCount: 0, ratedBy: {} };
+    if (!favData[id].ratedBy) favData[id].ratedBy = {};
 
+    // Check if device already rated
+    const previousRating = favData[id].ratedBy[deviceId];
+
+    if (previousRating) {
+        // If they already rated, just update their previous score
+        favData[id].ratingSum = favData[id].ratingSum - previousRating + rating;
+    } else {
+        // New rating from a new device
+        favData[id].ratingSum += rating;
+        favData[id].ratingCount += 1;
+    }
+
+    // Save the new rating for this device
+    favData[id].ratedBy[deviceId] = rating;
+    
+    await saveFavs();
     res.json(getAttractionStats(id));
 });
 
@@ -904,18 +919,27 @@ app.post('/api/favorite/:id', async (req, res) => {
     const attraction = attractions.find(a => a.id === id);
     if (!attraction) return res.status(404).json({ error: 'Not found' });
 
-    const action = req.body.action; // "add" or "remove"
-    if (!favData[id]) favData[id] = { favorites: 0, ratingSum: 0, ratingCount: 0 };
+    const { action, deviceId } = req.body;
+    
+    // Ensure the data structure exists
+    if (!favData[id]) favData[id] = { favorites: 0, ratingSum: 0, ratingCount: 0, favoritedBy: {} };
+    if (!favData[id].favoritedBy) favData[id].favoritedBy = {};
 
     if (action === 'add') {
-        favData[id].favorites += 1;
+        // Only add if this device hasn't favorited it yet
+        if (!favData[id].favoritedBy[deviceId]) {
+            favData[id].favorites += 1;
+            favData[id].favoritedBy[deviceId] = true; // Mark device as favorited
+        }
     } else if (action === 'remove') {
-        favData[id].favorites = Math.max(0, favData[id].favorites - 1);
+        // Only remove if this device actually favorited it before
+        if (favData[id].favoritedBy[deviceId]) {
+            favData[id].favorites = Math.max(0, favData[id].favorites - 1);
+            delete favData[id].favoritedBy[deviceId]; // Remove device from list
+        }
     }
 
-    // AWAIT added here
     await saveFavs();
-    
     res.json(getAttractionStats(id));
 });
 
