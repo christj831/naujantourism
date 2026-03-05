@@ -944,7 +944,7 @@ app.post('/api/favorite/:id', async (req, res) => {
     res.json(getAttractionStats(id));
 });
 
-app.get('/dashboard', (req, res) => {
+app.get('/admin/dashboard', (req, res) => {
     // Add these headers to prevent caching on Vercel and the browser
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.setHeader('Pragma', 'no-cache');
@@ -960,19 +960,19 @@ app.get('/dashboard', (req, res) => {
     });
 });
 
-app.post('/dashboard/reset', async (req, res) => {
-    console.log('Received POST /dashboard/reset');
+app.post('/admin/dashboard/reset', async (req, res) => {
+    console.log('Received POST /admin/dashboard/reset');
     // AWAIT added back. While awaiting might have caused local hangs before, 
     // it is necessary on Vercel to ensure the operation completes.
     await resetVisits();
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
 });
 
-app.post('/dashboard/reset-favs', async (req, res) => {
-    console.log('Received POST /dashboard/reset-favs');
+app.post('/admin/dashboard/reset-favs', async (req, res) => {
+    console.log('Received POST /admin/dashboard/reset-favs');
     // AWAIT added back.
     await resetFavs();
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
 });
 
 if (process.env.NODE_ENV !== 'production') {
