@@ -1,572 +1,454 @@
 <%- include('partials/header') %>
 
-    <script>(function () { try { localStorage.removeItem('role'); } catch (e) { } })();</script>
+<script>(function () { try { localStorage.removeItem('role'); } catch (e) { } })();</script>
 
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
-    <style>
-        #map {
-            width: 100%;
-            height: 400px;
-            border-radius: 10px;
-        }
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+<style>
+    #map {
+        width: 100%;
+        height: 400px;
+        border-radius: 10px;
+    }
 
-        .marker {
-            background-image: url('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png');
-            background-size: cover;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
+    .marker {
+        background-image: url('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png');
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
 
-        }
+    .gallery-img:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+</style>
 
-        .gallery-img:hover {
-            transform: scale(1.1);
-            cursor: pointer;
-        }
-    </style>
+<div class="container my-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/explore">Explore</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <%= attraction.name %>
+            </li>
+        </ol>
+    </nav>
 
-    <div class="container my-5">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a href="/explore">Explore</a></li>
-                <li class="breadcrumb-item active" aria-current="page">
-                    <%= attraction.name %>
-                </li>
-            </ol>
-        </nav>
+    <div class="row">
+        <div class="col-lg-7">
 
-        <div class="row">
-            <div class="col-lg-7">
+            <span class="badge bg-warning text-dark mb-2 fs-6">
+                <%= attraction.category %>
+            </span>
+            <img src="<%= attraction.image %>" class="img-fluid rounded shadow mb-4" alt="<%= attraction.name %>"
+                decoding="async" style="width: 100%; max-height: 500px; object-fit: cover;">
 
-                <span class="badge bg-warning text-dark mb-2 fs-6">
-                    <%= attraction.category %>
-                </span>
-                <img src="<%= attraction.image %>" class="img-fluid rounded shadow mb-4" alt="<%= attraction.name %>"
-                    decoding="async" style="width: 100%; max-height: 500px; object-fit: cover;">
+            <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+                <div>
+                    <h1 class="display-4 fw-bold mb-2">
+                        <%= attraction.name %>
+                    </h1>
 
-                <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
-                    <div>
-
-                        <h1 class="display-4 fw-bold mb-2">
-                            <%= attraction.name %>
-                        </h1>
-
-                        <% if (attraction.uniqueHighlight) { %>
-                            <div class="mt-1 mb-2">
-
-                                <span class="unique-highlight-pill attraction-hero-pill">
-                                    <%= attraction.uniqueHighlight %>
-                                </span>
-                            </div>
-
-                            <% } %>
-                    </div>
-                    <button type="button" class="btn btn-outline-danger rounded-pill px-3 favorite-btn"
-                        data-favorite-id="<%= attraction.id %>"
-                        data-global-fav="<%= stats ? stats.favoritesCount : 0 %>" aria-pressed="false"
-                        title="Save to favorites">
-                        <i class="fa-regular fa-heart me-1" aria-hidden="true"></i>
-                        <span class="favorite-btn-label">Save (<%= stats ? stats.favoritesCount : 0 %>)</span>
-                    </button>
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="rating-container" data-id="<%= attraction.id %>" style="cursor: pointer;">
-                            <% const avg=stats && stats.avgRating ? Math.round(stats.avgRating) : 0; %>
-                                <% for (let i=1; i <=5; i++) { %>
-                                    <i class="<%= i <= avg ? 'fa-solid text-warning' : 'fa-regular' %> fa-star rating-star fs-4"
-                                        data-value="<%= i %>"></i>
-                                    <% } %>
-                                        <span class="rating-label small text-muted ms-2">
-                                            <% if (stats && stats.ratingCount> 0) { %>
-                                                <%= stats.avgRating %> / 5 (<%= stats.ratingCount %> reviews)
-                                                        <% } else { %>
-                                                            Rate this spot
-                                                            <% } %>
-                                        </span>
+                    <% if (attraction.uniqueHighlight) { %>
+                        <div class="mt-1 mb-2">
+                            <span class="unique-highlight-pill attraction-hero-pill">
+                                <%= attraction.uniqueHighlight %>
+                            </span>
                         </div>
+                    <% } %>
+                </div>
+                
+                <button type="button" class="btn btn-outline-danger rounded-pill px-3 favorite-btn"
+                    data-favorite-id="<%= attraction.id %>"
+                    data-global-fav="<%= stats ? stats.favoritesCount : 0 %>" aria-pressed="false"
+                    title="Save to favorites">
+                    <i class="fa-regular fa-heart me-1" aria-hidden="true"></i>
+                    <span class="favorite-btn-label">Save (<%= stats ? stats.favoritesCount : 0 %>)</span>
+                </button>
+                
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rating-container" data-id="<%= attraction.id %>" style="cursor: pointer;">
+                        <% const avg = stats && stats.avgRating ? Math.round(stats.avgRating) : 0; %>
+                        <% for (let i = 1; i <= 5; i++) { %>
+                            <i class="<%= i <= avg ? 'fa-solid text-warning' : 'fa-regular' %> fa-star rating-star fs-4"
+                                data-value="<%= i %>"></i>
+                        <% } %>
+                        <span class="rating-label small text-muted ms-2">
+                            <% if (stats && stats.ratingCount > 0) { %>
+                                <%= stats.avgRating %> / 5 (<%= stats.ratingCount %> reviews)
+                            <% } else { %>
+                                Rate this spot
+                            <% } %>
+                        </span>
                     </div>
                 </div>
-
-                <% const hasRoomsOrMenuTop=(attraction.rooms && attraction.rooms.length) || (attraction.menu &&
-                    attraction.menu.length); const hasRentTop=attraction.rent && attraction.rent.length; const
-                    showAccommodationButton=(attraction.category==='Accommodation' || attraction.category==='Resort' )
-                    && hasRoomsOrMenuTop; const showEventsButton=attraction.category==='Event-Place' && hasRentTop; %>
-                    <% if (showAccommodationButton || showEventsButton) { %>
-                        <div class="mb-3">
-                            <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm"
-                                data-bs-toggle="modal" data-bs-target="#accommodationInfoModal">
-                                View
-
-                                <% if (attraction.category==='Event-Place' ) { %>
-                                    Rent
-                                    <% } else if (attraction.rooms && attraction.menu) { %>
-                                        Rooms & Menu
-
-                                        <% } else if (attraction.rooms) { %>
-                                            Rooms
-                                            <% } else { %>
-
-                                                Menu
-                                                <% } %>
-                            </button>
-                        </div>
-                        <% } %>
-
-                            <% if (attraction.gallery && attraction.gallery.length> 0) { %>
-                                <div class="mt-5">
-                                    <h4 class="fw-bold mb-3">Photo Gallery</h4>
-                                    <div class="row g-2">
-                                        <% attraction.gallery.forEach(function(photo) { %>
-
-                                            <div class="col-md-4 col-6">
-                                                <div class="overflow-hidden rounded shadow-sm">
-
-
-                                                    <a data-fslightbox="gallery" href="<%= photo %>">
-                                                        <img src="<%= photo %>" class="img-fluid gallery-img"
-                                                            alt="Gallery Photo for <%= attraction.name %>"
-                                                            loading="lazy" decoding="async"
-                                                            style="width: 100%; height: 120px; object-fit: cover; transition: transform 0.3s ease;">
-                                                    </a>
-
-
-                                                </div>
-                                            </div>
-                                            <% }); %>
-                                    </div>
-
-                                </div>
-                                <% } %>
-
-                                    <p class="lead mt-3" style="text-align: justify;">
-                                        <%= attraction.desc %>
-                                    </p>
-
-                                    <% if (attraction.category==='Resort' || attraction.category==='Accommodation' || attraction.category==='Food / Resto' ) {
-                                        %>
-                                        <div class="mt-4 p-3 rounded shadow-sm border bg-light visitor-info-card">
-                                            <h5 class="fw-bold mb-3"><i
-                                                    class="fas fa-info-circle me-2 text-primary"></i>Visitor Information
-                                            </h5>
-                                            <ul class="list-unstyled mb-0">
-                                                <% if (attraction.openingHours) { %>
-                                                    <li class="mb-2">
-                                                        <strong><i
-                                                                class="far fa-clock me-2 text-secondary"></i>Hours:</strong>
-                                                        <%= attraction.openingHours %>
-                                                    </li>
-                                                    <% } %>
-
-                                                        <% if (attraction.entranceFees) { %>
-                                                            <li class="mb-2">
-                                                                <strong><i
-                                                                        class="fas fa-ticket-alt me-2 text-secondary"></i>Fees:</strong>
-                                                                <%= attraction.entranceFees %>
-                                                            </li>
-                                                            <% } %>
-
-                                                                <% if (attraction.visitorTips) { %>
-                                                                    <li class="mb-0">
-                                                                        <strong><i
-                                                                                class="far fa-lightbulb me-2 text-warning"></i>Tips:</strong>
-                                                                        <%= attraction.visitorTips %>
-                                                                    </li>
-                                                                    <% } %>
-                                            </ul>
-                                        </div>
-                                        <% } %>
-
-                                            <% if (typeof weather !=='undefined' && weather) { %>
-                                                <div class="mt-4 p-3 rounded shadow-sm border best-time-card">
-
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                                                        <div class="d-flex align-items-center gap-3">
-                                                            <% if (weather.icon) { %>
-
-                                                                <img src="<%= weather.icon %>"
-                                                                    alt="<%= weather.conditionText || 'Weather icon' %>"
-                                                                    width="48" height="48">
-                                                                <% } %>
-                                                                    <div>
-                                                                        <h5 class="fw-bold mb-1">
-
-                                                                            <i
-                                                                                class="fas fa-cloud-sun me-2 text-primary"></i>
-                                                                            Today’s weather & best time to visit
-
-                                                                        </h5>
-                                                                        <p class="small mb-1 text-muted">
-                                                                            <% if (weather.conditionText) { %>
-
-                                                                                <span>
-                                                                                    <%= weather.conditionText %>
-                                                                                </span>
-                                                                                <% } %>
-
-                                                                                    <% if (typeof
-                                                                                        weather.tempC==='number' ) { %>
-                                                                                        · <span>
-                                                                                            <%= weather.tempC.toFixed(1)
-                                                                                                %>°C
-                                                                                        </span>
-                                                                                        <% } %>
-
-                                                                                            <% if (typeof
-                                                                                                weather.feelsLikeC==='number'
-                                                                                                ) { %>
-                                                                                                · <span>Feels like <%=
-                                                                                                        weather.feelsLikeC.toFixed(1)
-                                                                                                        %>°C</span>
-
-                                                                                                <% } %>
-                                                                                                    <% if
-                                                                                                        (weather.chanceOfRain)
-                                                                                                        { %>
-                                                                                                        · <span>Chance
-                                                                                                            of rain: <%=
-                                                                                                                weather.chanceOfRain
-                                                                                                                %>
-                                                                                                                %</span>
-                                                                                                        <% } %>
-                                                                        </p>
-
-                                                                        <p class="mb-0">
-                                                                            <strong>
-                                                                                <%= weather.bestTimeLabel %>:
-                                                                            </strong>
-                                                                            <span class="text-muted">
-                                                                                <%= weather.bestTimeDetail %>
-                                                                            </span>
-
-                                                                        </p>
-                                                                    </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <% if (weather.forecastDays && weather.forecastDays.length> 0) { %>
-                                                        <hr class="my-3 text-muted" style="opacity: 0.2;">
-                                                        <div
-                                                            class="d-flex justify-content-around align-items-center flex-wrap mt-2">
-
-                                                            <% weather.forecastDays.forEach(function(day, index) { %>
-                                                                <div class="forecast-day-card text-center px-4 py-2">
-                                                                    <p class="mb-1 fw-bold text-dark"
-                                                                        style="font-size: 0.9rem;">
-                                                                        <%= index===0 ? 'Today' : day.date %>
-                                                                    </p>
-
-                                                                    <img src="<%= day.icon %>" alt="forecast icon"
-                                                                        width="40" height="40" class="mb-1">
-                                                                    <p class="mb-0" style="font-size: 0.85rem;">
-
-                                                                        <span class="fw-bold text-danger" title="High">
-                                                                            <%= day.maxTemp %>°
-                                                                        </span>
-                                                                        <span class="text-muted ms-1" title="Low">
-                                                                            <%= day.minTemp %>°
-                                                                        </span>
-
-                                                                    </p>
-                                                                </div>
-                                                                <% }); %>
-                                                        </div>
-                                                        <% } %>
-                                                </div>
-                                                <% } %>
-
-                                                    <% const hasContact=(attraction.website &&
-                                                        (Array.isArray(attraction.website) ? attraction.website.length :
-                                                        attraction.website)) || attraction.phone || attraction.email ||
-                                                        attraction.facebook; %>
-                                                        <% if (hasContact) { %>
-                                                            <div class="mt-4 p-3 rounded shadow-sm contact-info-card">
-                                                                <h5 class="fw-bold mb-3"><i
-                                                                        class="fas fa-address-card me-2 text-primary"></i>Contact
-                                                                    & Info</h5>
-                                                                <ul class="list-unstyled mb-0">
-
-                                                                    <% if (attraction.website) { const
-                                                                        sites=Array.isArray(attraction.website) ?
-                                                                        attraction.website : [attraction.website];
-                                                                        sites.forEach(function(url) { %>
-                                                                        <li class="mb-2">
-                                                                            <a href="<%= url.startsWith('http') ? url : 'https://' + url %>"
-                                                                                target="_blank"
-                                                                                rel="noopener noreferrer"
-                                                                                class="text-decoration-none">
-                                                                                <i
-                                                                                    class="fas fa-globe me-2 text-success"></i>
-                                                                                <%= url.replace(/^https?:\/\//i, '' ) %>
-
-                                                                            </a>
-                                                                        </li>
-                                                                        <% }); } %>
-                                                                            <% if (attraction.facebook) { const
-                                                                                fbLinks=Array.isArray(attraction.facebook)
-                                                                                ? attraction.facebook :
-                                                                                [attraction.facebook];
-                                                                                fbLinks.forEach(function(url) { %>
-                                                                                <li class="mb-2">
-                                                                                    <a href="<%= url.startsWith('http') ? url : 'https://' + url %>"
-                                                                                        target="_blank"
-                                                                                        rel="noopener noreferrer"
-                                                                                        class="text-decoration-none">
-                                                                                        <i class="fab fa-facebook me-2"
-                                                                                            style="color: #1877f2;"></i>Facebook
-                                                                                        Page
-
-                                                                                    </a>
-                                                                                </li>
-                                                                                <% }); } %>
-                                                                                    <% if (attraction.phone) { const
-                                                                                        phones=Array.isArray(attraction.phone)
-                                                                                        ? attraction.phone :
-                                                                                        [attraction.phone];
-                                                                                        phones.forEach(function(p) { %>
-                                                                                        <li class="mb-2">
-                                                                                            <a href="tel:<%= p.replace(/\s/g, '') %>"
-                                                                                                class="text-decoration-none"><i
-                                                                                                    class="fas fa-phone me-2 text-primary"></i>
-                                                                                                <%= p %>
-                                                                                            </a>
-                                                                                        </li>
-
-                                                                                        <% }); } %>
-                                                                                            <% if (attraction.email) {
-                                                                                                const
-                                                                                                emails=Array.isArray(attraction.email)
-                                                                                                ? attraction.email :
-                                                                                                [attraction.email];
-                                                                                                emails.forEach(function(e)
-                                                                                                { %>
-                                                                                                <li class="mb-2">
-                                                                                                    <a href="mailto:<%= e %>"
-                                                                                                        class="text-decoration-none"><i
-                                                                                                            class="fas fa-envelope me-2 text-primary"></i>
-                                                                                                        <%= e %>
-                                                                                                    </a>
-                                                                                                </li>
-
-                                                                                                <% }); } %>
-                                                                </ul>
-                                                            </div>
-                                                            <% } %>
             </div>
 
-            <div class="col-lg-5">
-                <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
-                    <div class="card-body p-0">
+            <% 
+            const hasRoomsOrMenuTop = (attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length) || (attraction.addons && attraction.addons.length);
+            const hasRentTop = attraction.rent && attraction.rent.length;
+            const showAccommodationButton = (attraction.category === 'Accommodation' || attraction.category === 'Resort') && hasRoomsOrMenuTop;
+            const showEventsButton = attraction.category === 'Event-Place' && hasRentTop; 
+            %>
+            
+            <% if (showAccommodationButton || showEventsButton) { %>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm"
+                        data-bs-toggle="modal" data-bs-target="#accommodationInfoModal">
+                        View
+                        <% if (attraction.category === 'Event-Place') { %>
+                            Rent
+                        <% } else if (attraction.rooms && attraction.addons) { %>
+                            Rooms & Add-ons
+                        <% } else if (attraction.rooms && attraction.menu) { %>
+                            Rooms & Menu
+                        <% } else if (attraction.rooms) { %>
+                            Rooms
+                        <% } else if (attraction.addons) { %>
+                            Add-ons
+                        <% } else { %>
+                            Menu
+                        <% } %>
+                    </button>
+                </div>
+            <% } %>
 
-                        <div id="map" data-mapbox-token="<%= typeof mapboxToken !== 'undefined' ? mapboxToken : '' %>">
+            <% if (attraction.gallery && attraction.gallery.length > 0) { %>
+                <div class="mt-5">
+                    <h4 class="fw-bold mb-3">Photo Gallery</h4>
+                    <div class="row g-2">
+                        <% attraction.gallery.forEach(function(photo) { %>
+                            <div class="col-md-4 col-6">
+                                <div class="overflow-hidden rounded shadow-sm">
+                                    <a data-fslightbox="gallery" href="<%= photo %>">
+                                        <img src="<%= photo %>" class="img-fluid gallery-img"
+                                            alt="Gallery Photo for <%= attraction.name %>"
+                                            loading="lazy" decoding="async"
+                                            style="width: 100%; height: 120px; object-fit: cover; transition: transform 0.3s ease;">
+                                    </a>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+
+            <p class="lead mt-3" style="text-align: justify;">
+                <%= attraction.desc %>
+            </p>
+
+            <% if (attraction.category === 'Resort' || attraction.category === 'Accommodation' || attraction.category === 'Food / Resto' || attraction.id === 'organic-healing-park' || attraction.id === 'la-familia-cortijo') { %>
+                <div class="mt-4 p-3 rounded shadow-sm border bg-light visitor-info-card">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-info-circle me-2 text-primary"></i>Visitor Information</h5>
+                    <ul class="list-unstyled mb-0">
+                        <% if (attraction.openingHours) { %>
+                            <li class="mb-2">
+                                <strong><i class="far fa-clock me-2 text-secondary"></i>Hours:</strong>
+                                <%= attraction.openingHours %>
+                            </li>
+                        <% } %>
+
+                        <% if (attraction.entranceFees) { %>
+                            <li class="mb-2">
+                                <strong><i class="fas fa-ticket-alt me-2 text-secondary"></i>Fees:</strong>
+                                <%= attraction.entranceFees %>
+                            </li>
+                        <% } %>
+
+                        <% if (attraction.visitorTips) { %>
+                            <li class="mb-0">
+                                <strong><i class="far fa-lightbulb me-2 text-warning"></i>Tips:</strong>
+                                <%= attraction.visitorTips %>
+                            </li>
+                        <% } %>
+                    </ul>
+                </div>
+            <% } %>
+
+            <% if (typeof weather !== 'undefined' && weather) { %>
+                <div class="mt-4 p-3 rounded shadow-sm border best-time-card">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <% if (weather.icon) { %>
+                                <img src="<%= weather.icon %>" alt="<%= weather.conditionText || 'Weather icon' %>" width="48" height="48">
+                            <% } %>
+                            <div>
+                                <h5 class="fw-bold mb-1">
+                                    <i class="fas fa-cloud-sun me-2 text-primary"></i>
+                                    Today’s weather & best time to visit
+                                </h5>
+                                <p class="small mb-1 text-muted">
+                                    <% if (weather.conditionText) { %>
+                                        <span><%= weather.conditionText %></span>
+                                    <% } %>
+                                    <% if (typeof weather.tempC === 'number') { %>
+                                        · <span><%= weather.tempC.toFixed(1) %>°C</span>
+                                    <% } %>
+                                    <% if (typeof weather.feelsLikeC === 'number') { %>
+                                        · <span>Feels like <%= weather.feelsLikeC.toFixed(1) %>°C</span>
+                                    <% } %>
+                                    <% if (weather.chanceOfRain) { %>
+                                        · <span>Chance of rain: <%= weather.chanceOfRain %>%</span>
+                                    <% } %>
+                                </p>
+                                <p class="mb-0">
+                                    <strong><%= weather.bestTimeLabel %>:</strong>
+                                    <span class="text-muted"><%= weather.bestTimeDetail %></span>
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-footer bg-white p-3 d-flex justify-content-between align-items-center">
-                        <div>
 
-                            <h5 class="fw-bold mb-1">How to get there</h5>
-                            <p class="small text-muted mb-0">Location: Naujan, Oriental Mindoro</p>
+                    <% if (weather.forecastDays && weather.forecastDays.length > 0) { %>
+                        <hr class="my-3 text-muted" style="opacity: 0.2;">
+                        <div class="d-flex justify-content-around align-items-center flex-wrap mt-2">
+                            <% weather.forecastDays.forEach(function(day, index) { %>
+                                <div class="forecast-day-card text-center px-4 py-2">
+                                    <p class="mb-1 fw-bold text-dark" style="font-size: 0.9rem;">
+                                        <%= index === 0 ? 'Today' : day.date %>
+                                    </p>
+                                    <img src="<%= day.icon %>" alt="forecast icon" width="40" height="40" class="mb-1">
+                                    <p class="mb-0" style="font-size: 0.85rem;">
+                                        <span class="fw-bold text-danger" title="High"><%= day.maxTemp %>°</span>
+                                        <span class="text-muted ms-1" title="Low"><%= day.minTemp %>°</span>
+                                    </p>
+                                </div>
+                            <% }); %>
                         </div>
+                    <% } %>
+                </div>
+            <% } %>
 
+            <% const hasContact = (attraction.website && (Array.isArray(attraction.website) ? attraction.website.length : attraction.website)) || attraction.phone || attraction.email || attraction.facebook; %>
+            <% if (hasContact) { %>
+                <div class="mt-4 p-3 rounded shadow-sm contact-info-card">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-address-card me-2 text-primary"></i>Contact & Info</h5>
+                    <ul class="list-unstyled mb-0">
+                        <% if (attraction.website) { 
+                            const sites = Array.isArray(attraction.website) ? attraction.website : [attraction.website];
+                            sites.forEach(function(url) { %>
+                                <li class="mb-2">
+                                    <a href="<%= url.startsWith('http') ? url : 'https://' + url %>" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                                        <i class="fas fa-globe me-2 text-success"></i><%= url.replace(/^https?:\/\//i, '') %>
+                                    </a>
+                                </li>
+                        <% }); } %>
+                        
+                        <% if (attraction.facebook) { 
+                            const fbLinks = Array.isArray(attraction.facebook) ? attraction.facebook : [attraction.facebook];
+                            fbLinks.forEach(function(url) { %>
+                                <li class="mb-2">
+                                    <a href="<%= url.startsWith('http') ? url : 'https://' + url %>" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                                        <i class="fab fa-facebook me-2" style="color: #1877f2;"></i>Facebook Page
+                                    </a>
+                                </li>
+                        <% }); } %>
+                        
+                        <% if (attraction.phone) { 
+                            const phones = Array.isArray(attraction.phone) ? attraction.phone : [attraction.phone];
+                            phones.forEach(function(p) { %>
+                                <li class="mb-2">
+                                    <a href="tel:<%= p.replace(/\s/g, '') %>" class="text-decoration-none">
+                                        <i class="fas fa-phone me-2 text-primary"></i><%= p %>
+                                    </a>
+                                </li>
+                        <% }); } %>
+                        
+                        <% if (attraction.email) { 
+                            const emails = Array.isArray(attraction.email) ? attraction.email : [attraction.email];
+                            emails.forEach(function(e) { %>
+                                <li class="mb-2">
+                                    <a href="mailto:<%= e %>" class="text-decoration-none">
+                                        <i class="fas fa-envelope me-2 text-primary"></i><%= e %>
+                                    </a>
+                                </li>
+                        <% }); } %>
+                    </ul>
+                </div>
+            <% } %>
+        </div>
 
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=<%= attraction.coordinates[1] %>,<%= attraction.coordinates[0] %>"
-                            target="_blank" class="btn btn-success btn-sm rounded-pill px-3 shadow-sm">
-                            <i class="fas fa-directions me-1"></i> Get Directions
-
-                        </a>
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
+                <div class="card-body p-0">
+                    <div id="map" data-mapbox-token="<%= typeof mapboxToken !== 'undefined' ? mapboxToken : '' %>"></div>
+                </div>
+                <div class="card-footer bg-white p-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold mb-1">How to get there</h5>
+                        <p class="small text-muted mb-0">Location: Naujan, Oriental Mindoro</p>
                     </div>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=<%= attraction.coordinates[1] %>,<%= attraction.coordinates[0] %>"
+                        target="_blank" class="btn btn-success btn-sm rounded-pill px-3 shadow-sm">
+                        <i class="fas fa-directions me-1"></i> Get Directions
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <% const hasRoomsOrMenu=(attraction.rooms && attraction.rooms.length) || (attraction.menu &&
-        attraction.menu.length); const hasRent=attraction.rent && attraction.rent.length; const
-        showAccommodationModal=(attraction.category==='Accommodation' || attraction.category==='Resort' ) &&
-        hasRoomsOrMenu; const showEventsModal=attraction.category==='Event-Place' && hasRent; %>
-        <% if (showAccommodationModal || showEventsModal) { %>
-            <div class="modal fade" id="accommodationInfoModal" tabindex="-1"
-                aria-labelledby="accommodationInfoModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="accommodationInfoModalLabel">
-                                <%= attraction.name %> – Details
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<% 
+const hasRoomsOrMenu = (attraction.rooms && attraction.rooms.length) || (attraction.menu && attraction.menu.length) || (attraction.addons && attraction.addons.length);
+const hasRent = attraction.rent && attraction.rent.length;
+const showAccommodationModal = (attraction.category === 'Accommodation' || attraction.category === 'Resort') && hasRoomsOrMenu;
+const showEventsModal = attraction.category === 'Event-Place' && hasRent; 
+%>
 
+<% if (showAccommodationModal || showEventsModal) { %>
+    <div class="modal fade" id="accommodationInfoModal" tabindex="-1" aria-labelledby="accommodationInfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="accommodationInfoModalLabel">
+                        <%= attraction.name %> – Details
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <% if (showEventsModal) { %>
+                        <h6 class="fw-bold mb-2">Rental Packages</h6>
+                        <div class="row g-3 mb-3">
+                            <% attraction.rent.forEach(function(r) { %>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="card h-100 shadow-sm border-0">
+                                        <% if (r.image) { %>
+                                            <img src="<%= r.image %>" class="card-img-top" alt="<%= r.name %>" loading="lazy" decoding="async" style="height: 140px; object-fit: cover;">
+                                        <% } %>
+                                        <div class="card-body">
+                                            <h6 class="card-title mb-1"><%= r.name %></h6>
+                                            <% if (r.details) { %>
+                                                <p class="card-text small mb-2"><%= r.details %></p>
+                                            <% } %>
+                                            <% if (r.price) { %>
+                                                <span class="badge bg-success-subtle text-success-emphasis small px-2 py-1">
+                                                    <%- r.price.replace(/\n/g, '<br>') %>
+                                                </span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
                         </div>
-                        <div class="modal-body">
-                            <% if (showEventsModal) { %>
-                                <h6 class="fw-bold mb-2">Rental Packages</h6>
-                                <div class="row g-3 mb-3">
-
-                                    <% attraction.rent.forEach(function(r) { %>
-                                        <div class="col-12 col-md-6 col-lg-4">
-                                            <div class="card h-100 shadow-sm border-0">
-
-                                                <% if (r.image) { %>
-                                                    <img src="<%= r.image %>" class="card-img-top" alt="<%= r.name %>"
-                                                        loading="lazy" decoding="async"
-                                                        style="height: 140px; object-fit: cover;">
-                                                    <% } %>
-                                                        <div class="card-body">
-
-                                                            <h6 class="card-title mb-1">
-                                                                <%= r.name %>
-                                                            </h6>
-                                                            <% if (r.details) { %>
-
-                                                                <p class="card-text small mb-2">
-                                                                    <%= r.details %>
-                                                                </p>
-                                                                <% } %>
-                                                                    <% if (r.price) { %>
-
-                                                                        <span
-                                                                            class="badge bg-success-subtle text-success-emphasis small px-2 py-1">
-                                                                            <%- r.price.replace(/\n/g, '<br>' ) %>
-
-                                                                        </span>
-                                                                        <% } %>
-
-                                                        </div>
+                    <% } else { %>
+                        <% if (attraction.rooms && attraction.rooms.length) { %>
+                            <h6 class="fw-bold mb-2">Room Options</h6>
+                            <div class="row g-3 mb-3">
+                                <% attraction.rooms.forEach(function(room) { %>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="card h-100 shadow-sm border-0">
+                                            <% if (room.image) { %>
+                                                <img src="<%= room.image %>" class="card-img-top" alt="<%= room.name %>" loading="lazy" decoding="async" style="height: 140px; object-fit: cover;">
+                                            <% } %>
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-1"><%= room.name %></h6>
+                                                <p class="card-text small mb-2"><%= room.details %></p>
+                                                <% if (room.price) { %>
+                                                    <span class="badge bg-success-subtle text-success-emphasis small px-2 py-1">
+                                                        <%- room.price.replace(/\n/g, '<br>') %>
+                                                    </span>
+                                                <% } %>
                                             </div>
                                         </div>
-                                        <% }); %>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        <% } %>
 
-                                </div>
-                                <% } else { %>
-                                    <% if (attraction.rooms && attraction.rooms.length) { %>
-                                        <h6 class="fw-bold mb-2">Room Options</h6>
-
-                                        <div class="row g-3 mb-3">
-                                            <% attraction.rooms.forEach(function(room) { %>
-                                                <div class="col-12 col-md-6 col-lg-4">
-
-                                                    <div class="card h-100 shadow-sm border-0">
-                                                        <% if (room.image) { %>
-
-                                                            <img src="<%= room.image %>" class="card-img-top"
-                                                                alt="<%= room.name %>" loading="lazy" decoding="async"
-                                                                style="height: 140px; object-fit: cover;">
-                                                            <% } %>
-                                                                <div class="card-body">
-
-                                                                    <h6 class="card-title mb-1">
-                                                                        <%= room.name %>
-                                                                    </h6>
-                                                                    <p class="card-text small mb-2">
-                                                                        <%= room.details %>
-                                                                    </p>
-
-                                                                    <% if (room.price) { %>
-                                                                        <span
-                                                                            class="badge bg-success-subtle text-success-emphasis small px-2 py-1">
-
-                                                                            <%- room.price.replace(/\n/g, '<br>' ) %>
-                                                                        </span>
-
-                                                                        <% } %>
-                                                                </div>
-                                                    </div>
-
-                                                </div>
-                                                <% }); %>
-                                        </div>
-
-                                        <% } %>
-
-                                            <% if (attraction.menu && attraction.menu.length) { %>
-                                                <h6 class="fw-bold mb-2 mt-3">Menu Highlights</h6>
-                                                <div class="row g-3">
-
-                                                    <% attraction.menu.forEach(function(item) { %>
-                                                        <div class="col-12 col-md-6 col-lg-4">
-                                                            <div class="card h-100 shadow-sm border-0">
-
-                                                                <% if (item.image) { %>
-                                                                    <img src="<%= item.image %>" class="card-img-top"
-                                                                        alt="<%= item.name %>" loading="lazy"
-                                                                        decoding="async"
-                                                                        style="height: 140px; object-fit: cover;">
-                                                                    <% } %>
-                                                                        <div class="card-body">
-
-                                                                            <h6 class="card-title mb-1">
-                                                                                <%= item.name %>
-                                                                            </h6>
-                                                                            <p class="card-text small mb-2">
-                                                                                <%= item.details %>
-                                                                            </p>
-
-                                                                            <% if (item.price) { %>
-                                                                                <span
-                                                                                    class="badge bg-primary-subtle text-primary-emphasis small px-2 py-1">
-
-                                                                                    <%- item.price.replace(/\n/g, '<br>'
-                                                                                        ) %>
-                                                                                </span>
-
-                                                                                <% } %>
-                                                                        </div>
-                                                            </div>
-
-                                                        </div>
-                                                        <% }); %>
-                                                </div>
-
+                        <% if (attraction.menu && attraction.menu.length) { %>
+                            <h6 class="fw-bold mb-2 mt-3">Menu Highlights</h6>
+                            <div class="row g-3 mb-3">
+                                <% attraction.menu.forEach(function(item) { %>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="card h-100 shadow-sm border-0">
+                                            <% if (item.image) { %>
+                                                <img src="<%= item.image %>" class="card-img-top" alt="<%= item.name %>" loading="lazy" decoding="async" style="height: 140px; object-fit: cover;">
+                                            <% } %>
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-1"><%= item.name %></h6>
+                                                <p class="card-text small mb-2"><%= item.details %></p>
+                                                <% if (item.price) { %>
+                                                    <span class="badge bg-primary-subtle text-primary-emphasis small px-2 py-1">
+                                                        <%- item.price.replace(/\n/g, '<br>') %>
+                                                    </span>
                                                 <% } %>
-                                                    <% } %>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm"
-                                data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        <% } %>
+
+                        <% if (attraction.addons && attraction.addons.length) { %>
+                            <h6 class="fw-bold mb-2 mt-3">Add-ons & Other Fees</h6>
+                            <div class="row g-3">
+                                <% attraction.addons.forEach(function(item) { %>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="card h-100 shadow-sm border-0">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-1"><%= item.name %></h6>
+                                                <% if (item.details) { %>
+                                                    <p class="card-text small mb-2"><%= item.details %></p>
+                                                <% } %>
+                                                <% if (item.price) { %>
+                                                    <span class="badge bg-info-subtle text-info-emphasis small px-2 py-1">
+                                                        <%- item.price.replace(/\n/g, '<br>') %>
+                                                    </span>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        <% } %>
+                    <% } %>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
-            <% } %>
+        </div>
+    </div>
+<% } %>
 
-                <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
-                <script>
-                    var mapboxToken = document.getElementById('map').getAttribute('data-mapbox-token') || '';
-                    mapboxgl.accessToken = mapboxToken;
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+<script>
+    var mapboxToken = document.getElementById('map').getAttribute('data-mapbox-token') || '';
+    mapboxgl.accessToken = mapboxToken;
+    if (mapboxToken) {
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/outdoors-v12',
+            center: [<%= attraction.coordinates[0] %>, <%= attraction.coordinates[1] %>],
+            zoom: 13
+        });
+        map.addControl(new mapboxgl.NavigationControl());
+        new mapboxgl.Marker({ color: "#FF0000" })
+            .setLngLat([<%= attraction.coordinates[0] %>, <%= attraction.coordinates[1] %>])
+            .setPopup(new mapboxgl.Popup().setHTML("<h5><%= attraction.name %></h5>"))
+            .addTo(map);
+    } else {
+        document.getElementById('map').innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 bg-light rounded"><p class="text-muted mb-0">Set MAPBOX_ACCESS_TOKEN in your environment to show the map.</p></div>';
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.js"></script>
 
-                    if (mapboxToken) {
-                        var map = new mapboxgl.Map({
-                            container: 'map',
-                            style: 'mapbox://styles/mapbox/outdoors-v12',
-                            center: [<%= attraction.coordinates[0] %>, <%= attraction.coordinates[1] %>],
-                            zoom: 13
-                        });
-                        map.addControl(new mapboxgl.NavigationControl());
-                        new mapboxgl.Marker({ color: "#FF0000" })
-                            .setLngLat([<%= attraction.coordinates[0] %>, <%= attraction.coordinates[1] %>])
-                            .setPopup(new mapboxgl.Popup().setHTML("<h5><%= attraction.name %></h5>"))
-                            .addTo(map);
-                    } else {
-                        document.getElementById('map').innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 bg-light rounded"><p class="text-muted mb-0">Set MAPBOX_ACCESS_TOKEN in your environment to show the map.</p></div>';
-                    }
-                </script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.js"></script>
+<style>
+    /* Styling for the 3-day forecast cards */
+    .forecast-day-card {
+        transition: all 0.2s ease-in-out;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        cursor: default;
+    }
 
-                <style>
-                    /* Styling for the 3-day forecast cards */
-                    .forecast-day-card {
-                        transition: all 0.2s ease-in-out;
-                        border-radius: 12px;
-                        border: 1px solid transparent;
-                        cursor: default;
-                    }
+    .forecast-day-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        border-color: #e9ecef;
+        background-color: #f8f9fa;
+    }
+</style>
 
-                    .forecast-day-card:hover {
-                        transform: translateY(-4px);
-                        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-                        border-color: #e9ecef;
-                        background-color: #f8f9fa;
-                    }
-                </style>
-
-                <%- include('partials/footer') %>
+<%- include('partials/footer') %>
