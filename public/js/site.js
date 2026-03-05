@@ -2,6 +2,16 @@
   const STORAGE_KEY = 'naujan:favorites';
   const RATINGS_KEY = 'naujan:ratings';
 
+  function getDeviceId() {
+  let deviceId = localStorage.getItem('naujan:deviceId');
+  if (!deviceId) {
+    // Generate a random unique ID if one doesn't exist
+    deviceId = 'device-' + Date.now() + '-' + Math.random().toString(36).substring(2, 15);
+    localStorage.setItem('naujan:deviceId', deviceId);
+  }
+  return deviceId;
+}
+  
   function getFavorites() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -51,18 +61,18 @@
 
   // --- START RATINGS LOGIC ---
   async function submitRatingApi(attractionId, value) {
-    try {
-      const resp = await fetch(`/api/rate/${attractionId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rating: value })
-      });
-      return await resp.json();
-    } catch (e) {
-      console.error(e);
-      return null;
-    }
+  try {
+    const resp = await fetch(`/api/rate/${attractionId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rating: value, deviceId: getDeviceId() }) // Added deviceId
+    });
+    return await resp.json();
+  } catch (e) {
+    console.error(e);
+    return null;
   }
+}
 
   async function setRating(attractionId, value) {
     updateRatingUI(attractionId, value, null);
@@ -122,18 +132,18 @@
   }
 
   async function toggleFavoriteApi(id, action) {
-    try {
-      const resp = await fetch(`/api/favorite/${id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action })
-      });
-      return await resp.json();
-    } catch (e) {
-      console.error(e);
-      return null;
-    }
+  try {
+    const resp = await fetch(`/api/favorite/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: action, deviceId: getDeviceId() }) // Added deviceId
+    });
+    return await resp.json();
+  } catch (e) {
+    console.error(e);
+    return null;
   }
+}
 
   function wireFavoriteClicks() {
     document.addEventListener('click', async (e) => {
@@ -169,4 +179,5 @@
   } else {
     init();
   }
+
 })();
