@@ -952,7 +952,7 @@ app.get('/admin/dashboard', (req, res) => {
     
     const attractionsWithVisits = getAttractionsWithVisits();
     const totalVisits = attractionsWithVisits.reduce((sum, a) => sum + a.visits, 0);
-    res.render('dashboard', {
+    res.render('admin/dashboard', {
         title: 'Analytics Dashboard - Visit Naujan',
         attractionsWithVisits,
         totalVisits,
