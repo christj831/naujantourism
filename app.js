@@ -405,9 +405,9 @@ const attractions = [
         coordinates: [121.312303, 13.31945],
         gallery: ['/images/mai/1.jpg', '/images/mai/2.jpg', '/images/mai/3.jpg', '/images/mai/4.jpg', '/images/mai/5.jpg'],
         facebook: 'https://web.facebook.com/profile.php?id=100075758085120',
-        openingHours: 'Private Booking Only',
-        entranceFees: 'Starts at ₱5,000 / 12 hrs',
-        visitorTips: 'You can bring your own food and drinks. Ideal for undisturbed family bonding.'
+        openingHours: 'Always Open',
+        phone: '0927 906 0728',
+        entranceFees: 'Message FB page for more information'
     },
     {
         id: 'rio-del-sierra',
@@ -431,7 +431,8 @@ const attractions = [
         gallery: ['/images/djmv/1.jpg', '/images/djmv/2.jpg', '/images/djmv/3.jpg', '/images/djmv/4.jpg'],
         facebook: 'https://web.facebook.com/djmvfarm1960',
         phone: '0995 154 1359',
-        email: 'djmvfarm12@gmail.com'
+        email: 'djmvfarm12@gmail.com',
+        openingHours: '08:00 - 17:00 Weekdays / 09:00 - 17:00 Weekends'
     },
     {
         id: 'villa-valerie',
@@ -444,9 +445,24 @@ const attractions = [
         gallery: ['/images/valerie/1.jpg', '/images/valerie/2.jpg'],
         coordinates: [121.30551630916001, 13.273115341550229],
         facebook: 'https://web.facebook.com/profile.php?id=100083105421531',
-        openingHours: '8:00 AM - 10:00 PM',
-        entranceFees: '₱100 Adult / ₱80 Kids',
-        visitorTips: 'It gets quite popular on weekends, so arrive early to secure a good cottage!'
+        openingHours: '08:00 - 17:00',
+        entranceFees: '₱75 3-7yrs old / ₱150.00 8-59yrs old / ₱130.00 Senior Citizen',
+        visitorTips: 'It gets quite popular on weekends, so arrive early to secure a good cottage!',
+        rooms: [
+            { name: 'Family Room', details: '10 - 12 packs', price: '₱6,000.00 / 2pm - 11am', image: '' },
+            { name: 'Standard Room', details: '2 packs', price: '₱2,000.00 / 2pm - 11am', image: '' },
+            { name: 'Extra Bed', details: 'If the bed is not enough', price: '₱250.00', image: '' }
+        ],
+        addons: [
+            { name: 'Videoke Rent', details: '', price: '₱500.00' },
+            { name: 'Billiards', details: '', price: '₱100.00 / hour' },
+            { name: 'Bangka', details: '', price: '₱100.00 / hour' },
+            { name: 'Ihawan', details: '', price: '₱100.00 charge' },
+            { name: 'Liquor Corkage', details: '', price: '₱500.00' },
+            { name: 'Day Time Swimming', details: '8:00 AM to 5:00 PM only', price: '' },
+            { name: 'Overtime Swimming', details: "Until 8:00 PM", price: 'Kids: ₱25.00 \n Adult: ₱50.00' },
+            { name: 'Night Swimming', details: '4:00 PM - 9:00 PM', price: 'Kids: ₱100.00 \n Adult: ₱200.00' }
+        ]
     },
     {
         id: 'karacha-falls',
@@ -484,7 +500,8 @@ const attractions = [
             { name: 'Rent', details: 'Rent the whole area', price: 'Contact them using the links', image: '/images/cortijo/offer.jpg' }
         ],
         facebook: 'https://web.facebook.com/pinoyfleamarket',
-        phone: '0966-251-0050'
+        phone: '0966-251-0050',
+        openingHours: 'Always Open'
     },
     {
         id: 'darie-tambayan',
@@ -518,10 +535,7 @@ const attractions = [
         rooms: [
             { name: 'Studio Unit', details: 'With kitchenette', price: '₱1,200 / night' },
             { name: 'Family Suite', details: 'Good for 5–6 pax', price: '₱2,000 / night' }
-        ],
-        openingHours: '24/7 Front Desk',
-        entranceFees: 'N/A (Room rates apply)',
-        visitorTips: 'Use the kitchenette! Buy fresh seafood at the local Naujan market and cook it yourself.'
+        ]
     },
     {
         id: 'naujan-travellers-inn',
@@ -566,10 +580,7 @@ const attractions = [
         gallery: ['/images/dorm/1.jpg', '/images/dorm/2.jpg'],
         rooms: [
             { name: 'Dorm Bed', details: 'Shared room, fan', price: '₱5,000 / night', image: '/images/dorm/1.jpg' }
-        ],
-        openingHours: 'Check-in: 2:00 PM',
-        entranceFees: 'N/A (Room Rates Apply)',
-        visitorTips: 'Ideal for big student trips or training groups. Book well ahead of local agricultural events.'
+        ]
     },
     {
         id: 'balay-murraya',
@@ -588,9 +599,7 @@ const attractions = [
         { name: 'Silid Lakatan', details: 'max 4 adults', price: 'Go to Balay Murraya FB page' },
         { name: 'Silid Palmera', details: 'max 4 adults', price: 'Go to Balay Murraya FB page' }
         ],
-        openingHours: 'Check-in: 2:00 PM | Check-out: 12:00 NN',
-        entranceFees: 'N/A (Room Rates Apply)',
-        visitorTips: 'Every corner is Instagrammable, so be sure to take photos during the golden hour.'
+        openingHours: '21:00 - 18:00 Everyday'
     },
     {
         id: 'bistro-amparo',
@@ -605,18 +614,25 @@ const attractions = [
         id: 'EUT',
         name: 'Eat, Unwind, Tea (EUT)',
         category: 'Food / Resto',
+        image: "/images/eut/main.jpg",
         coordinates: [121.30076869567007, 13.319883003820582],
     },
     {
         id: 'big-brew',
         name: 'Big Brew',
         category: 'Food / Resto',
-        coordinates: [121.30076869567007, 13.319883003820582],
+        image: "/images/big-brew/main.jpg",
+        coordinates: [121.30270306499425, 13.323418453468708],
+        facebook: "https://www.facebook.com/profile.php?id=61552072790649",
+        openingHours: '10:00 - 20:00',
+        email: 'bigbrewnaujan@gmail.com',
+        phone: '0912 567 4719'
     },
     {
         id: 'sizzling',
         name: 'Sizzling',
         category: 'Food / Resto',
+        image: "/images/sizzling/main.jpg",
         coordinates: [121.30076869567007, 13.319883003820582],
     },
     {
@@ -633,6 +649,7 @@ const attractions = [
         id: 'melbourne-lomi-house',
         name: 'Melbourne Lomi House',
         category: 'Food / Resto',
+        image: "/images/melbourne/main.jpg",
         coordinates: [121.30076869567007, 13.319883003820582],
     }
 ];
