@@ -608,7 +608,8 @@ const attractions = [
         image: "/images/bistro/main.jpg",
         coordinates: [121.22478519996423, 13.276361916243165],
         facebook: "https://www.facebook.com/BistroAmparo",
-        openingHours: '10:00 - 20:00'
+        openingHours: '10:00 - 20:00',
+        gallery: ['/images/bistro/1.jpg', '/images/bistro/2.jpg']
     },
     {
         id: 'EUT',
